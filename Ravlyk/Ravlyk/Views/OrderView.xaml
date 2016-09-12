@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Ravlyk.Views.OrderView" BackgroundColor="White"
+             xmlns:local="clr-namespace:Ravlyk.ViewModels;assembly=Ravlyk" >
+
+  <ContentPage.ToolbarItems>
+    <ToolbarItem Text="Кошик"/>
+  </ContentPage.ToolbarItems>
+
+  <StackLayout>
+    <ListView ItemsSource="{Binding OrderItems}" HasUnevenRows="True" SelectedItem="Binding DeletedOrder" >
+      <ListView.ItemTemplate>
+        <DataTemplate>
+          <ViewCell>
+
+            <ViewCell.View>
+              <StackLayout BackgroundColor="White">
+
+                <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+                  <Image Source="{Binding Dish.ImagePath}" HorizontalOptions="CenterAndExpand"
+                       WidthRequest="200" HeightRequest="200"/>
+                  <StackLayout Padding="0,10">
+                    <Label Text="{Binding Dish.Title}" FontSize="Large" />
+                    <Label Text="{Binding Dish.Price}" FontSize="Medium"/>
+
+                    <StackLayout Orientation="Horizontal"  HeightRequest="40" WidthRequest="50">
+                      <Button Text="-" Command="{Binding Source={local:OrderViewModel}, Path=StepperDecCommand}"  CommandParameter="{Binding}" WidthRequest="50"/>
+                      <ContentView Padding="0,5">
+                        <Label Text="{Binding Count}" FontSize="Medium" />
+                      </ContentView>
+                      <Button Text="+" Command="{Binding Source={local:OrderViewModel}, Path=StepperIncCommand}"  CommandParameter="{Binding}" WidthRequest="50"/>
+                    </StackLayout>
+
+                    <Button Text="Видалити" BackgroundColor="#da4f49" TextColor="#ffffff" HorizontalOptions="Start" WidthRequest="150"
+                     Command="{Binding Source={local:OrderViewModel}, Path=DeleteOrderCommand}"  CommandParameter="{Binding}" />
+                  </StackLayout>
+
+                </StackLayout>
+
+              </StackLayout>
+
+            </ViewCell.View>
+          </ViewCell>
+        </DataTemplate>
+      </ListView.ItemTemplate>
+
+    </ListView>
+    <StackLayout HorizontalOptions="Center" Orientation="Horizontal">
+
+      <Label Text="Усього:" FontSize="Medium"/>
+      <Label Text="{Binding TotalPrice}" FontSize="Medium" />
+      <Label Text="грн" FontSize="Medium"/>
+
+    </StackLayout>
+    <StackLayout Orientation="Horizontal" VerticalOptions="End" Spacing="-10" HorizontalOptions="CenterAndExpand" Padding="-5,0,0,0">
+      <Button Text="Очистити" BackgroundColor="#da4f49" TextColor="#ffffff" Command="{Binding ClearOrdersCommand}"
+             FontSize="Medium" WidthRequest="205" />
+      <Button Text="Замовити" BackgroundColor="#229ac8" TextColor="#ffffff" Command="{Binding ConfirmCommand}"
+            FontSize="Medium" WidthRequest="210" />
+
+    </StackLayout>
+
+  </StackLayout>
+
+</ContentPage>
