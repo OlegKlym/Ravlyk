@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Ravlyk.Views.FormView">
+  <StackLayout>
+    <TableView>
+      <TableView.Root>
+        <TableRoot>
+          <TableSection Title="Деталі Доставки">
+
+            <EntryCell Keyboard="Default" Placeholder="Ваше ім'я" />
+
+            <EntryCell Keyboard="Default" Placeholder="Адреса доставки" />
+
+            <EntryCell Keyboard="Email" Placeholder="Ваш email" />
+
+            <EntryCell Keyboard="Telephone" Placeholder="Ваш номер телефону" />
+          </TableSection>
+        </TableRoot>
+      </TableView.Root>
+    </TableView>
+    <Button Text="Підтвердити замовлення" BackgroundColor="#229ac8" TextColor="#fff" />
+  </StackLayout>
+
+</ContentPage>

@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Ravlyk.Views.CategoryView" BackgroundColor="White">
+
+  <ContentPage.ToolbarItems>
+    <ToolbarItem Text="{Binding Title}"/>
+    <ToolbarItem Icon="basket.png" Command="{Binding ClickBasketCommand}"/>
+  </ContentPage.ToolbarItems>
+
+
+  <StackLayout>
+    <ListView ItemsSource="{Binding Dishes}" SeparatorColor="White"
+              SelectedItem="{Binding SelectedDish}" HasUnevenRows="True" >
+      <ListView.ItemTemplate>
+        <DataTemplate>
+          <ViewCell>
+            <ViewCell.View>
+              <StackLayout BackgroundColor="White" Padding="0,5">
+                <StackLayout HorizontalOptions="CenterAndExpand" Spacing="-30">
+                  <Image Source="{Binding ImagePath}" HeightRequest="275" />
+                  <StackLayout Orientation="Horizontal" Spacing="-5" HorizontalOptions="CenterAndExpand">
+                    <ContentView  BackgroundColor="#888"  WidthRequest="235" Padding="10,5,10,0">
+                      <Label Text="{Binding Title}" TextColor="#fff" FontSize="Medium"/>
+                    </ContentView >
+                    <ContentView BackgroundColor="#229ac8" WidthRequest="60" Padding="5">
+                      <Label Text="{Binding Price}" TextColor="#fff" FontSize="Medium"/>
+                    </ContentView>
+                  </StackLayout>
+                </StackLayout>
+              </StackLayout>
+            </ViewCell.View>
+          </ViewCell>
+        </DataTemplate>
+      </ListView.ItemTemplate>
+    </ListView>
+  </StackLayout >
+
+</ContentPage>
