@@ -2,9 +2,13 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Ravlyk.Views.MainView" BackgroundColor="White">
-  <ContentPage.ToolbarItems>
-    <ToolbarItem Icon="basket.png" Command="{Binding ClickBasketCommand}" />
+  
+  <ContentPage.ToolbarItems >
+    <ToolbarItem Icon="basket.png" Command="{Binding ClickBasketCommand}"/>
+   
   </ContentPage.ToolbarItems>
+
+
 
   <ListView ItemsSource="{Binding Shops}" HorizontalOptions="CenterAndExpand"
             SelectedItem="{Binding SelectedShop}" HasUnevenRows="True">
