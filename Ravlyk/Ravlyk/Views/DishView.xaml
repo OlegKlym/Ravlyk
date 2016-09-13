@@ -4,7 +4,6 @@
              x:Class="Ravlyk.Views.DishView" BackgroundColor="White"  Title="{Binding Title}">
 
   <ContentPage.ToolbarItems>
-    <ToolbarItem Text="{Binding Title}"/>
     <ToolbarItem Icon="basket.png" Command="{Binding ClickBasketCommand}"/>
   </ContentPage.ToolbarItems>
   <StackLayout HorizontalOptions="Center" >

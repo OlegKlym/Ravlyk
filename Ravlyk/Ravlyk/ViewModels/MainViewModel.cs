@@ -62,11 +62,19 @@ namespace Ravlyk.ViewModels
                 if (selectedShop != value)
                 {
                     ShopViewModel tempShop = value;
-                    selectedShop = null;                   
+                    selectedShop = null;                             
                     if (tempShop.Categories.Count == 1)
+                    {
+                       
                         Navigation.PushAsync(new CategoryView(tempShop.Categories[0]));
+                    }
+
                     else
+                    {
+                       
                         Navigation.PushAsync(new ShopView(tempShop));
+                    }
+                       
 
                 }
             }

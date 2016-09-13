@@ -8,6 +8,8 @@ using Android.Widget;
 using Android.OS;
 using Xamarin.Forms.Platform.Android;
 using Xamarin.Forms;
+using Android.Support.V7.App;
+using Android.Graphics.Drawables;
 
 namespace Ravlyk.Droid
 {
@@ -17,10 +19,11 @@ namespace Ravlyk.Droid
         protected override void OnCreate(Bundle bundle)
         {
             FormsAppCompatActivity.ToolbarResource = Resource.Layout.toolbar;
-
+            
             base.OnCreate(bundle);
             Forms.Init(this, bundle);
             LoadApplication(new App());
+           
         }
     }
 }

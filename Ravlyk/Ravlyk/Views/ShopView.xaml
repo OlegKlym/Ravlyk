@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Ravlyk.Views.ShopView" BackgroundColor="White" Title="{Binding Title}">
   <ContentPage.ToolbarItems>
-    <ToolbarItem Icon="basket.png" Command="{Binding ClickBasketCommand}"/>
+    <ToolbarItem Icon="basket.png" Command="{Binding ClickBasketCommand}" />
   </ContentPage.ToolbarItems>
 
   <StackLayout>
