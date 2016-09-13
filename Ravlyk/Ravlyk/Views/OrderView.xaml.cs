@@ -15,6 +15,7 @@ namespace Ravlyk.Views
         public OrderView()
         {
             InitializeComponent();
+            NavigationPage.SetHasBackButton(this, false);
             BindingContext = new OrderViewModel() { OrderItems = OrderService.Instance.GetOrders() };
         }
     }

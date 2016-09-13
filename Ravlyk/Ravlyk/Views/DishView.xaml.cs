@@ -14,6 +14,7 @@ namespace Ravlyk.Views
         public DishView(DishViewModel vm)
         {
             InitializeComponent();
+            NavigationPage.SetHasBackButton(this, false);
             BindingContext = vm;
             vm.Navigation = Navigation;
         }

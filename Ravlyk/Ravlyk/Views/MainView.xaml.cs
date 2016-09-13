@@ -14,6 +14,7 @@ namespace Ravlyk.Views
         public MainView()
         {
             InitializeComponent();
+            NavigationPage.SetHasBackButton(this, false);
             BindingContext = new MainViewModel() { Navigation = this.Navigation };
         }
     }

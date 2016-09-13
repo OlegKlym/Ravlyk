@@ -2522,6 +2522,9 @@ namespace Ravlyk.Droid
 			// aapt resource value: 0x7f070016
 			public const int multiply = 2131165206;
 			
+			// aapt resource value: 0x7f070099
+			public const int mytext = 2131165337;
+			
 			// aapt resource value: 0x7f07006d
 			public const int navigation_header_container = 2131165293;
 			

@@ -17,6 +17,7 @@ namespace Ravlyk.Views
             InitializeComponent();
             ViewModel = vm;
             ViewModel.Navigation = Navigation;
+            NavigationPage.SetHasBackButton(this, false);
             BindingContext = ViewModel;
 
         }

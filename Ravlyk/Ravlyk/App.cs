@@ -10,9 +10,15 @@ namespace Ravlyk
 {
     public class App : Application
     {
+        public static MasterDetailPage MasterDetailPage;
         public App()
         {
-            MainPage = new NavigationPage(new MainView());
+            MasterDetailPage = new MasterDetailPage
+            {
+                Master = new MenuPage("Title"),
+                Detail = new NavigationPage(new MainView()),
+            };
+            MainPage = MasterDetailPage;
             //Xamarin.Forms.DependencyService.Register<DataService.Service>();
 
         }
