@@ -15,7 +15,7 @@ namespace Ravlyk
         {
             MasterDetailPage = new MasterDetailPage
             {
-                Master = new MenuPage("Title"),
+                Master = new MenuPage("Main"),
                 Detail = new NavigationPage(new MainView()),
             };
             MainPage = MasterDetailPage;

@@ -12,8 +12,9 @@ namespace Ravlyk.Views
     {
         public MenuPage(string name)
         {
-            Title = name;
+           
             InitializeComponent();
+            Title = name;
         }
     }
 }

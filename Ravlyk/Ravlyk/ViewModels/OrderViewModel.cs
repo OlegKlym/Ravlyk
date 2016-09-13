@@ -105,15 +105,20 @@ namespace Ravlyk.ViewModels
             }
             Navigation = Xamarin.Forms.Application.Current.MainPage.Navigation;
             if (OrderService.Instance.GetOrders().Count == 0)
-                Navigation.PushAsync(new MainView());
+            {
+                App.MasterDetailPage.Detail = new NavigationPage(new MainView());
+            }
+               
+           
+
 
 
         }
 
         public void ClearOrders()
         {
-            OrderItems.Clear();
-            Navigation.PushAsync(new MainView());
+            OrderService.Instance.Clear();
+            App.MasterDetailPage.Detail = new NavigationPage(new MainView());
         }
 
         public void Confirm()

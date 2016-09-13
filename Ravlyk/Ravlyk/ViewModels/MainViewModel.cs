@@ -72,7 +72,7 @@ namespace Ravlyk.ViewModels
                     else
                     {
                        
-                        Navigation.PushAsync(new ShopView(tempShop));
+                       Navigation.PushAsync(new ShopView(tempShop));
                     }
                        
 

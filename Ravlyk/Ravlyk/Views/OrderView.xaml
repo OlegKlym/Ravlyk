@@ -16,7 +16,7 @@
 
                 <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
                   <Image Source="{Binding Dish.ImagePath}" HorizontalOptions="CenterAndExpand"
-                       WidthRequest="200" HeightRequest="200"/>
+                       WidthRequest="180" HeightRequest="180"/>
                   <StackLayout Padding="0,10">
                     <Label Text="{Binding Dish.Title}" FontSize="Large" />
                     <Label Text="{Binding Dish.Price}" FontSize="Medium"/>
