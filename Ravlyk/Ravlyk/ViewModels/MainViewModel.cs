@@ -18,7 +18,7 @@ namespace Ravlyk.ViewModels
 
         ShopViewModel selectedShop;
         public ICommand ClickBasketCommand { protected set; get; }
-        public INavigation Navigation { get; set; }  
+        public INavigation Navigation { get; set; }
         private DataService _dataService = new DataService();
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -62,20 +62,34 @@ namespace Ravlyk.ViewModels
                 if (selectedShop != value)
                 {
                     ShopViewModel tempShop = value;
-                    selectedShop = null;                             
+                    selectedShop = null;
                     if (tempShop.Categories.Count == 1)
                     {
-                       
                         Navigation.PushAsync(new CategoryView(tempShop.Categories[0]));
                     }
 
                     else
                     {
-                       
-                       Navigation.PushAsync(new ShopView(tempShop));
+                        Navigation.PushAsync(new ShopView(tempShop));
                     }
-                       
+                }
+            }
+        }
 
+        public string Basket
+        {
+            get
+            {
+                if (OrderService.Instance.GetOrders() == null)
+                {
+                    return "basket.png";
+                }
+                else
+                {
+                    if (OrderService.Instance.GetOrders().Count == 0)
+                        return "basket.png";
+                    else
+                        return "plus.png";
                 }
             }
         }
@@ -90,7 +104,7 @@ namespace Ravlyk.ViewModels
             {
 
             }
-           
+
         }
 
 

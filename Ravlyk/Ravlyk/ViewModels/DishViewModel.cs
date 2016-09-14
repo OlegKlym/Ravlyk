@@ -67,6 +67,25 @@ namespace Ravlyk.ViewModels
             }
         }
 
+        public string Basket
+        {
+            get
+            {
+                if (OrderService.Instance.GetOrders() == null)
+                {
+                    return "basket.png";
+                }
+                else
+                {
+                    if (OrderService.Instance.GetOrders().Count == 0)
+                        return "basket.png";
+                    else
+                        return "plus.png";
+                }
+            }
+        }
+
+
         public void ClickedBasket()
         {
             Navigation.PushAsync(new OrderView());
@@ -76,7 +95,7 @@ namespace Ravlyk.ViewModels
         public void AddDish()
         {
             OrderService.Instance.AddDish(Dish);
-            Navigation.PopAsync();
+            Navigation.PushAsync(new MainView());
         }
     }
 }

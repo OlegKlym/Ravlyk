@@ -5,7 +5,9 @@
   <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
     <Label Text="Клуб доставки їжі" FontSize="Large" TextColor="#fff"/>
     <Label Text="12:00 - 22:00" FontSize="Large" TextColor="#fff"/>
-    <Label Text="+38 (073) 130-40-30" FontSize="Large" TextColor="#fff"/>
-    <Label Text="+38 (097) 130-40-30" FontSize="Large" TextColor="#fff"/>
+    <Button Text="+38 (073) 130-40-30" FontSize="Large" TextColor="#fff"  BackgroundColor="#FF6666" 
+            Command="{Binding PhoneCallCommand}" CommandParameter="+38 (073) 130-40-30"/>
+    <Button Text="+38 (097) 130-40-30" FontSize="Large" TextColor="#fff"  BackgroundColor="#FF6666" 
+            Command="{Binding PhoneCallCommand}" CommandParameter="+38 (097) 130-40-30"/>
   </StackLayout>
 </ContentPage>

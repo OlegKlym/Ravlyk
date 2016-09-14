@@ -1,4 +1,5 @@
 ﻿using Ravlyk.Models;
+using Ravlyk.Services;
 using Ravlyk.Views;
 using System;
 using System.Collections.Generic;
@@ -82,7 +83,23 @@ namespace Ravlyk.ViewModels
             }
         }
 
-
+        public string Basket
+        {
+            get
+            {
+                if (OrderService.Instance.GetOrders() == null)
+                {
+                    return "basket.png";
+                }
+                else
+                {
+                    if (OrderService.Instance.GetOrders().Count == 0)
+                        return "basket.png";
+                    else
+                        return "plus.png";
+                }
+            }
+        }
 
         public void ClickedBasket()
         {

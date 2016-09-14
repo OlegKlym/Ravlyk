@@ -17,6 +17,7 @@ namespace Ravlyk.Views
             vm.Navigation = Navigation;
             NavigationPage.SetHasBackButton(this, false);
             BindingContext = vm;
+           
         }
 
     }

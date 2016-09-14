@@ -4,7 +4,7 @@
              x:Class="Ravlyk.Views.MainView" BackgroundColor="White">
   
   <ContentPage.ToolbarItems >
-    <ToolbarItem Icon="basket.png" Command="{Binding ClickBasketCommand}"/>
+    <ToolbarItem Icon="{Binding Basket}" Command="{Binding ClickBasketCommand}"/>
   </ContentPage.ToolbarItems>
 
 
