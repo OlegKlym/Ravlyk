@@ -3,6 +3,7 @@ using Ravlyk.Services;
 using Ravlyk.Views;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,8 +12,9 @@ using Xamarin.Forms;
 
 namespace Ravlyk.ViewModels
 {
-    public class DishViewModel
+    public class DishViewModel : INotifyPropertyChanged
     {
+        private string basket;
         public DishModel Dish { get; private set; }
         public ICommand AddDishCommand { protected set; get; }
         public ICommand ClickBasketCommand { protected set; get; }
@@ -20,6 +22,7 @@ namespace Ravlyk.ViewModels
         public OrderModel order = new OrderModel();
         DishViewModel selectedDish;
 
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public DishViewModel()
         {
@@ -67,6 +70,7 @@ namespace Ravlyk.ViewModels
             }
         }
 
+      
         public string Basket
         {
             get
@@ -83,19 +87,40 @@ namespace Ravlyk.ViewModels
                         return "plus.png";
                 }
             }
+            set
+            {
+                basket = value;
+                OnPropertyChanged("Basket");
+
+            }
+        }
+
+        public void OnPropertyChanged(string name)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
 
         public void ClickedBasket()
         {
-            Navigation.PushAsync(new OrderView());
-            Navigation.RemovePage(this.Navigation.NavigationStack[this.Navigation.NavigationStack.Count - 1]);
+            try { Navigation.PushAsync(new OrderView()); }
+            catch { }
         }
 
         public void AddDish()
         {
             OrderService.Instance.AddDish(Dish);
-            Navigation.PushAsync(new MainView());
+            if (OrderService.Instance.GetOrders() == null)
+            {
+                Basket = "basket.png";
+            }
+            else
+            {
+                if (OrderService.Instance.GetOrders().Count == 0)
+                    Basket = "basket.png";
+                else
+                    Basket = "plus.png";
+            }
         }
     }
 }

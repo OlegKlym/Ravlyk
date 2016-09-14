@@ -1,114 +1,95 @@
-﻿using Ravlyk.Services;
+﻿using Caliburn.Micro;
+using Caliburn.Micro.Xamarin.Forms;
+using Ravlyk.Models;
+using Ravlyk.Services;
 using Ravlyk.Views;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace Ravlyk.ViewModels
 {
-    public class MainViewModel : INotifyPropertyChanged
+    public class MainViewModel : Screen
     {
-        public ObservableCollection<ShopViewModel> Shops { get; set; }
-
-        ShopViewModel selectedShop;
-        public ICommand ClickBasketCommand { protected set; get; }
-        public INavigation Navigation { get; set; }
-        private DataService _dataService = new DataService();
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public MainViewModel()
+        private ObservableCollection<ShopModel> _shops;
+        public ObservableCollection<ShopModel> Shops
         {
-            ClickBasketCommand = new Command(ClickedBasket);
-            LoadData();
-        }
-
-        public async Task LoadData()
-        {
-
-            Shops = new ObservableCollection<ShopViewModel>();
-
-            Shops.Add(await _dataService.LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=63_147"));
-            Shops.Add(await _dataService.LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=72_81"));
-            Shops.Add(await _dataService.LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=98_99"));
-            Shops.Add(await _dataService.LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=59_62"));
-
-            Shops.Add(await _dataService.LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=88_138"));
-            Shops.Add(await _dataService.LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=76_77"));
-            Shops.Add(await _dataService.LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=96_97"));
-            Shops.Add(await _dataService.LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=92_105"));
-
-            Shops.Add(await _dataService.LoadShopAsync(" http://ravlyk.club/index.php?route=product/category&path=90_91"));
-            Shops.Add(await _dataService.LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=135_136"));
-            Shops.Add(await _dataService.LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=94_95"));
-            Shops.Add(await _dataService.LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=130_134"));
-
-            Shops.Add(await _dataService.LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=155_157"));
-            Shops.Add(await _dataService.LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=163_169"));
-            Shops.Add(await _dataService.LoadShopAsync("http://ravlyk.club/index.php?route=product/category"));
-        }
-
-        public ShopViewModel SelectedShop
-        {
-            get { return selectedShop; }
+            get { return _shops; }
             set
             {
-                if (selectedShop != value)
-                {
-                    ShopViewModel tempShop = value;
-                    selectedShop = null;
-                    if (tempShop.Categories.Count == 1)
-                    {
-                        Navigation.PushAsync(new CategoryView(tempShop.Categories[0]));
-                    }
-
-                    else
-                    {
-                        Navigation.PushAsync(new ShopView(tempShop));
-                    }
-                }
+                _shops = value;
+                NotifyOfPropertyChange(() => Shops);
             }
         }
+        
+        private readonly DataService _dataService;
+        private readonly INavigationService _navigationService;
 
-        public string Basket
+        public MainViewModel(DataService dataService, INavigationService navigationService)
+        {
+            _dataService = dataService;
+            _navigationService = navigationService;
+        }
+
+        public ShopModel _selectedShop;
+        public ShopModel SelectedShop
         {
             get
             {
-                if (OrderService.Instance.GetOrders() == null)
-                {
-                    return "basket.png";
-                }
-                else
-                {
-                    if (OrderService.Instance.GetOrders().Count == 0)
-                        return "basket.png";
+                return _selectedShop;
+            }
+
+            set
+            {
+                if (value == null)
+                    return;
+
+                    if (value.Categories.Count == 1)
+                    {
+                        _navigationService.For<ShopViewModel>().WithParam(x => x.ShopId, value.Id).Navigate();
+                    }
+
                     else
-                        return "plus.png";
-                }
+                    {
+                        _navigationService.For<ShopViewModel>().WithParam(x => x.ShopId, value.Id).Navigate();
+                    }
             }
         }
 
-        public void ClickedBasket()
+        protected override void OnActivate()
         {
-            try
-            {
-                Navigation.PushAsync(new OrderView());
-            }
-            catch
-            {
+            base.OnActivate();
 
-            }
-
+            // TODO: show progress indicator
+            LoadDataAsync();
+            // TODO: hide progress indicator
         }
 
+        private async Task LoadDataAsync()
+        {
+            Shops = new ObservableCollection<ShopModel>();
 
+            Shops.Add(await _dataService.LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=63_147", "1"));
+            Shops.Add(await _dataService.LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=72_81", "2"));
+            Shops.Add(await _dataService.LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=98_99", "3"));
+            Shops.Add(await _dataService.LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=59_62", "5"));
+        
+            Shops.Add(await _dataService.LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=88_138", "6"));
+            Shops.Add(await _dataService.LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=76_77", "7"));
+            Shops.Add(await _dataService.LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=96_97", "8"));
+            Shops.Add(await _dataService.LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=92_105", "9"));
+
+            Shops.Add(await _dataService.LoadShopAsync(" http://ravlyk.club/index.php?route=product/category&path=90_91", "10"));
+            Shops.Add(await _dataService.LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=135_136", "11"));
+            Shops.Add(await _dataService.LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=94_95", "12"));
+            Shops.Add(await _dataService.LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=130_134", "13"));
+
+            Shops.Add(await _dataService.LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=155_157", "14"));
+            Shops.Add(await _dataService.LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=163_169", "15"));
+            Shops.Add(await _dataService.LoadShopAsync("http://ravlyk.club/index.php?route=product/category", "16"));
+        }
     }
-
 }
 

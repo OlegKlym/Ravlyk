@@ -3,11 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Ravlyk.Views.ShopView" BackgroundColor="White" Title="{Binding Title}">
   <ContentPage.ToolbarItems>
-    <ToolbarItem Icon="{Binding Basket}" Command="{Binding ClickBasketCommand}" />
+    <ToolbarItem Text="basket"/>
   </ContentPage.ToolbarItems>
 
   <StackLayout>
-    <ListView ItemsSource="{Binding Categories}"
+    <ListView ItemsSource="{Binding Shop.Categories}"
              SelectedItem="{Binding SelectedCategory}" HasUnevenRows="True"
              HorizontalOptions="CenterAndExpand">
       <ListView.ItemTemplate>

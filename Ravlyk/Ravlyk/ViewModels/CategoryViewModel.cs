@@ -21,10 +21,8 @@ namespace Ravlyk.ViewModels
 
         public CategoryViewModel()
         {
-          
             Category = new CategoryModel();
             ClickBasketCommand = new Command(ClickedBasket);
-          
         }
 
         public string Title
@@ -48,10 +46,10 @@ namespace Ravlyk.ViewModels
 
         public void ClickedBasket()
         {
-            Navigation.PushAsync(new OrderView());
-
+            try { Navigation.PushAsync(new OrderView()); }
+            catch { }
         }
-     
+
         public string Basket
         {
             get

@@ -47,7 +47,17 @@ namespace Ravlyk.ViewModels
 
         public int TotalPrice
         {
-            get { return Sum(); }
+            get { return OrderService.Instance.GetTotalPrice(); }
+            set {  TotalPrice = value;
+                OnPropertyChanged("TotalPrice");
+            }
+           
+        
+        }
+
+        public void OnPropertyChanged(string name)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
         public OrderModel Order
@@ -68,22 +78,14 @@ namespace Ravlyk.ViewModels
             set { OrderItem.Count = value; }
         }
 
-        public int Sum()
-        {
-            int totalprice = 0;
-            foreach (var item in OrderItems)
-            {
-                string text = Regex.Replace(item.Dish.Price, "[^0-9]", "", RegexOptions.Singleline);
-                totalprice += (int.Parse(text) * item.Count);
-            }
-            return totalprice;
-        }
+     
 
         private void StepperDec(object orderObject)
         {
             OrderItemModel orderItem = orderObject as OrderItemModel;
             OrderService.Instance.StepperDec(orderItem);
-            Navigation = Xamarin.Forms.Application.Current.MainPage.Navigation;
+            OrderService.Instance.SetTotalPrice(orderItem.Dish.Price, false);
+            TotalPrice = OrderService.Instance.GetTotalPrice();
 
         }
 
@@ -91,8 +93,9 @@ namespace Ravlyk.ViewModels
         {
             OrderItemModel orderItem = orderObject as OrderItemModel;
             OrderService.Instance.StepperInc(orderItem);
-            Navigation = Xamarin.Forms.Application.Current.MainPage.Navigation;
 
+            OrderService.Instance.SetTotalPrice(orderItem.Dish.Price,true);
+            TotalPrice = OrderService.Instance.GetTotalPrice();
         }
 
 
@@ -123,16 +126,16 @@ namespace Ravlyk.ViewModels
 
         public void Confirm()
         {
-            Navigation = Xamarin.Forms.Application.Current.MainPage.Navigation;
-            Navigation.PushModalAsync(new FormView(OrderService.Instance.GetOrders()));
+            if (OrderService.Instance.GetTotalPrice() > 69)
+            {
+                Navigation = Xamarin.Forms.Application.Current.MainPage.Navigation;
+                Navigation.PushModalAsync(new FormView(OrderService.Instance.GetOrders()));
+            }
+            
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected void OnPropertyChanged(string propName)
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(propName));
-        }
+      
     }
 }
