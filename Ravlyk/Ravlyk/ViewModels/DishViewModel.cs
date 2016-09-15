@@ -1,4 +1,6 @@
-﻿using Ravlyk.Models;
+﻿using Caliburn.Micro;
+using Caliburn.Micro.Xamarin.Forms;
+using Ravlyk.Models;
 using Ravlyk.Services;
 using Ravlyk.Views;
 using System;
@@ -12,115 +14,57 @@ using Xamarin.Forms;
 
 namespace Ravlyk.ViewModels
 {
-    public class DishViewModel : INotifyPropertyChanged
+    public class DishViewModel : Screen
     {
-        private string basket;
-        public DishModel Dish { get; private set; }
-        public ICommand AddDishCommand { protected set; get; }
-        public ICommand ClickBasketCommand { protected set; get; }
-        public INavigation Navigation { get; set; }
-        public OrderModel order = new OrderModel();
-        DishViewModel selectedDish;
+        public string DishId { get; set; }
+        public string CategoryId { get; set; }
+        public string ShopId { get; set; }
+        public ICommand AddDishCommand { set; get; }
+        public ICommand ClickBasketCommand { set; get; }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public DishViewModel()
-        {
-            Dish = new DishModel();
-            this.AddDishCommand = new Command(AddDish);
-            ClickBasketCommand = new Command(ClickedBasket);
-        }
-
-        public string Title
-        {
-            get { return Dish.Title; }
-            set { Dish.Title = value; }
-        }
-
-        public string Price
-        {
-            get { return Dish.Price; }
-            set { Dish.Price = value; }
-        }
-
-        public string Description
-        {
-            get { return Dish.Description; }
-            set { Dish.Description = value; }
-        }
-
-        public string ImagePath
-        {
-            get { return Dish.ImagePath; }
-            set { Dish.ImagePath = value; }
-        }
-
-        public DishViewModel SelectedDish
-        {
-            get { return selectedDish; }
-            set
-            {
-                if (selectedDish != value)
-                {
-                    DishViewModel tempDish = value;
-                    selectedDish = null;
-                    Navigation.PushAsync(new DishView(tempDish));
-
-                }
-            }
-        }
-
-      
-        public string Basket
+        private DishModel _dish;
+        public DishModel Dish
         {
             get
             {
-                if (OrderService.Instance.GetOrders() == null)
-                {
-                    return "basket.png";
-                }
-                else
-                {
-                    if (OrderService.Instance.GetOrders().Count == 0)
-                        return "basket.png";
-                    else
-                        return "plus.png";
-                }
+                return _dish;
             }
+
             set
             {
-                basket = value;
-                OnPropertyChanged("Basket");
-
+                _dish = value;
+                NotifyOfPropertyChange(() => Dish);
             }
         }
 
-        public void OnPropertyChanged(string name)
+        private readonly DataService _dataService;
+        private readonly INavigationService _navigationService;
+
+        public DishViewModel(DataService dataService, INavigationService navigationService)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            _dataService = dataService;
+            _navigationService = navigationService;
+            AddDishCommand = new Command(AddDish);
+            ClickBasketCommand = new Command(ClickBasket);
+
         }
 
-
-        public void ClickedBasket()
-        {
-            try { Navigation.PushAsync(new OrderView()); }
-            catch { }
-        }
-
-        public void AddDish()
+        protected void AddDish()
         {
             OrderService.Instance.AddDish(Dish);
-            if (OrderService.Instance.GetOrders() == null)
-            {
-                Basket = "basket.png";
-            }
-            else
-            {
-                if (OrderService.Instance.GetOrders().Count == 0)
-                    Basket = "basket.png";
-                else
-                    Basket = "plus.png";
-            }
+            OrderService.Instance.SetTotalPrice();
+        }
+
+        protected void ClickBasket()
+        {
+            _navigationService.For<OrderViewModel>().Navigate();
+        }
+
+
+        protected override void OnActivate()
+        {
+            base.OnActivate();           
+            Dish = _dataService.LoadDishModelById(ShopId, CategoryId, DishId);
         }
     }
 }

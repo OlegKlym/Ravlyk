@@ -25,8 +25,8 @@ namespace Ravlyk.Services
             {
                 Id = shopId,
                 ImagePath = shopList.ChildNodes[1].GetAttributeValue("src", ""),
-                Title = (shopList.ChildNodes.Count == 7) ? "" : shopList.ChildNodes[3].InnerText,
-                Address = (shopList.ChildNodes.Count == 7) ? shopList.ChildNodes[3].InnerText : shopList.ChildNodes[5].InnerText,
+                Title = (shopList.ChildNodes.Count == 7) ? shopList.ChildNodes[3].InnerText : shopList.ChildNodes[3].InnerText,
+                Address = (shopList.ChildNodes.Count == 7)  ? "" : shopList.ChildNodes[5].InnerText,
                 WorkTime = (shopList.ChildNodes.Count == 7) ? shopList.ChildNodes[5].InnerText : shopList.ChildNodes[6].InnerText,
                 Type = (shopList.ChildNodes.Count == 7) ? "" : shopList.ChildNodes[7].InnerText,
                 Description = (shopList.ChildNodes.Count == 7) ? "" : shopList.ChildNodes[8].InnerText,
@@ -39,31 +39,18 @@ namespace Ravlyk.Services
             return shop;
         }
 
-
         public ShopModel LoadShopModelById(string shopId)
         {
             return _shops.FirstOrDefault(x => x.Id == shopId);
         }
-
-        private async static Task<HtmlNode> LoadHtml(string url)
-        {
-            using (var client = new HttpClient())
-            {
-                url = url.Replace("amp;", "");
-                var htmlPage = await client.GetStringAsync(url);
-                var htmlDocument = new HtmlDocument();
-                htmlDocument.LoadHtml(htmlPage);
-                return htmlDocument.DocumentNode;
-            }
-        }
-
+          
         private async static Task<List<CategoryModel>> GetCategories(HtmlNode root)
         {
 
             List<CategoryModel> _categories = new List<CategoryModel>() { };
             var divList = root.Descendants().Where(n => n.GetAttributeValue("id", "").Equals("column-left")).Single().ChildNodes[1].ChildNodes;
             bool flag = false;
-
+            var id = 1;
             foreach (var item in divList)
             {
                 if (item.NodeType == HtmlNodeType.Element)
@@ -76,34 +63,63 @@ namespace Ravlyk.Services
 
                         _categories.Add(new CategoryModel()
                         {
+                            Id = id.ToString(),
                             ImagePath = item.ChildNodes[1].GetAttributeValue("src", ""),
                             Title = item.ChildNodes[3].InnerText,
                             Dishes = await GetDishes(url)
                         });
+                        id++;
                     }
                 }
             }
             return _categories;
         }
 
+        public CategoryModel LoadCategoryModelById(string shopId, string categoryId)
+        {
+            var shop = LoadShopModelById(shopId);
+            return shop.Categories.FirstOrDefault(x => x.Id == categoryId);
+        }
+
         private static async Task<List<DishModel>> GetDishes(string url)
         {
             var root = await LoadHtml(url);
             var divList = root.Descendants().Where(n => n.GetAttributeValue("class", "").Equals("product-thumb"));
+            var id = 1;
             List<DishModel> _dishes = new List<DishModel>() { };
             foreach (var item in divList)
             {
                 _dishes.Add(new DishModel()
                 {
+                    Id = id.ToString(),
                     ImagePath = item.ChildNodes[1].ChildNodes[0].GetAttributeValue("src", ""),
                     Title = (item.ChildNodes[3].ChildNodes[1].ChildNodes[1].InnerText.Contains("&quot;")) ?
                         item.ChildNodes[3].ChildNodes[1].ChildNodes[1].InnerText.Replace("&quot;", "''") : item.ChildNodes[3].ChildNodes[1].ChildNodes[1].InnerText,
                     Price = item.ChildNodes[3].ChildNodes[3].ChildNodes[1].InnerText,
                     Description = (item.ChildNodes[3].ChildNodes[1].ChildNodes.Count == 3) ? "" : item.ChildNodes[3].ChildNodes[1].ChildNodes[3].ChildNodes[1].InnerText.Replace("&nbsp;", "")
                 });
-
+                id++;
             }
             return _dishes;
+        }
+
+        public DishModel LoadDishModelById(string shopId, string categoryId, string dishId)
+        {
+            var category = LoadCategoryModelById(shopId, categoryId);
+            return category.Dishes.FirstOrDefault(x => x.Id == dishId);
+          
+        }
+
+        private async static Task<HtmlNode> LoadHtml(string url)
+        {
+            using (var client = new HttpClient())
+            {
+                url = url.Replace("amp;", "");
+                var htmlPage = await client.GetStringAsync(url);
+                var htmlDocument = new HtmlDocument();
+                htmlDocument.LoadHtml(htmlPage);
+                return htmlDocument.DocumentNode;
+            }
         }
     }
 }

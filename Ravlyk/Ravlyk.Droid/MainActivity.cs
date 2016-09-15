@@ -7,12 +7,12 @@ using Caliburn.Micro;
 
 namespace Ravlyk.Droid
 {
-    [Activity(Label = "Ravlyk", Icon = "@drawable/ic_launcher", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "Ravlyk", Icon = "@drawable/ic_launcher", MainLauncher = false, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : FormsAppCompatActivity
     {
         protected override void OnCreate(Bundle bundle)
         {
-            //FormsAppCompatActivity.ToolbarResource = Resource.Layout.toolbar;
+            FormsAppCompatActivity.ToolbarResource = Resource.Layout.toolbar;
             
             base.OnCreate(bundle);
             Forms.Init(this, bundle);

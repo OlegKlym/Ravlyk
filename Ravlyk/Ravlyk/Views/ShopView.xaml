@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Ravlyk.Views.ShopView" BackgroundColor="White" Title="{Binding Title}">
+             x:Class="Ravlyk.Views.ShopView" BackgroundColor="White" Title="{Binding Shop.Title}">
   <ContentPage.ToolbarItems>
-    <ToolbarItem Text="basket"/>
+    <ToolbarItem Icon="basket.png"/>
   </ContentPage.ToolbarItems>
 
   <StackLayout>
@@ -15,7 +15,7 @@
           <ViewCell>
             <ViewCell.View>
               <StackLayout BackgroundColor="White" Padding="0,5">
-                <Image Source="{Binding ImagePath}" WidthRequest="240" HeightRequest="240" HorizontalOptions="CenterAndExpand"/>
+                <Image Source="{Binding ImagePath}" WidthRequest="200" HeightRequest="200" HorizontalOptions="CenterAndExpand"/>
                 <Label Text="{Binding Title}" FontSize="Large" HorizontalOptions="CenterAndExpand"/>
               </StackLayout>
             </ViewCell.View>

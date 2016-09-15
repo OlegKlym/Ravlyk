@@ -2,11 +2,11 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Ravlyk.Views.OrderView" BackgroundColor="White"
-             xmlns:local="clr-namespace:Ravlyk.ViewModels;assembly=Ravlyk" Title="Кошик">
+             xmlns:local="clr-namespace:Ravlyk.Models;assembly=Ravlyk" Title="Кошик">
 
- 
+
   <StackLayout>
-    <ListView ItemsSource="{Binding OrderItems}" HasUnevenRows="True" SelectedItem="Binding DeletedOrder" >
+    <ListView ItemsSource="{Binding Orders}" HasUnevenRows="True" >
       <ListView.ItemTemplate>
         <DataTemplate>
           <ViewCell>
@@ -22,15 +22,15 @@
                     <Label Text="{Binding Dish.Price}" FontSize="Medium"/>
 
                     <StackLayout Orientation="Horizontal"  HeightRequest="40" WidthRequest="50">
-                      <Button Text="-" Command="{Binding Source={local:OrderViewModel}, Path=StepperDecCommand}"  CommandParameter="{Binding}" WidthRequest="50"/>
+                      <Button Text="-" Command="{Binding StepperDecCommand}"  CommandParameter="{Binding}" WidthRequest="50"/>
                       <ContentView Padding="0,5">
                         <Label Text="{Binding Count}" FontSize="Medium" />
                       </ContentView>
-                      <Button Text="+" Command="{Binding Source={local:OrderViewModel}, Path=StepperIncCommand}"  CommandParameter="{Binding}" WidthRequest="50"/>
+                      <Button Text="+" Command="{Binding StepperIncCommand}"  CommandParameter="{Binding}" WidthRequest="50"/>
                     </StackLayout>
 
                     <Button Text="Видалити" BackgroundColor="#da4f49" TextColor="#ffffff" HorizontalOptions="Start" WidthRequest="150"
-                     Command="{Binding Source={local:OrderViewModel}, Path=DeleteOrderCommand}"  CommandParameter="{Binding}" />
+                     Command="{Binding DeleteOrderCommand}"  CommandParameter="{Binding}" />
                   </StackLayout>
 
                 </StackLayout>
@@ -50,22 +50,21 @@
       <Label Text="грн" FontSize="Medium"/>
 
     </StackLayout>
+   
+
     <Grid>
-      <Grid.ColumnDefinitions >
+      <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*" />
         <ColumnDefinition Width="*" />
       </Grid.ColumnDefinitions>
-      <StackLayout Grid.Column="0" Grid.Row="0">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="*" /> 
+      </Grid.RowDefinitions>
+
         <Button Text="Очистити" BackgroundColor="#da4f49" TextColor="#ffffff" Command="{Binding ClearOrdersCommand}"
-                  FontSize="Medium" />
-      </StackLayout>
-      <StackLayout Grid.Column="1" Grid.Row="0" >
+               FontSize="Medium" WidthRequest="205" Grid.Column="0" Grid.Row="0" />
         <Button Text="Замовити" BackgroundColor="#229ac8" TextColor="#ffffff" Command="{Binding ConfirmCommand}"
-            FontSize="Medium" />
-      </StackLayout>
-
-
-
+              FontSize="Medium" WidthRequest="210" Grid.Column="1" Grid.Row="0" />
     </Grid>
 
   </StackLayout>

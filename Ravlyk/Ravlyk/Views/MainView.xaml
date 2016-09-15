@@ -2,11 +2,10 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Ravlyk.Views.MainView" BackgroundColor="White">
-  
-  <ContentPage.ToolbarItems >
-    <ToolbarItem Text="bastek(5)"/>
-  </ContentPage.ToolbarItems>
 
+  <ContentPage.ToolbarItems >
+    <ToolbarItem Icon="basket.png"/>
+  </ContentPage.ToolbarItems>
 
 
   <ListView ItemsSource="{Binding Shops}" HorizontalOptions="CenterAndExpand"
@@ -17,10 +16,10 @@
           <ViewCell.View>
             <StackLayout Orientation="Horizontal" BackgroundColor="White" Padding="0,5">
               <Image Source="{Binding ImagePath}" WidthRequest="200" HeightRequest="200" />
-              <StackLayout>
-                <Label x:Name="title" Text="{Binding Title}" TextColor="#444" FontSize="Large" FontFamily="Open Sans"/>
+              <StackLayout >
+                <Label Text="{Binding Title}" TextColor="#444" FontSize="Large" FontFamily="Open Sans"/>
                 <Label Text="{Binding Address}" TextColor="#666" FontSize="Small" FontFamily="Open Sans"/>
-                <Label Text="{Binding WorkTime}" TextColor="#666" FontSize="Small" FontFamily="Open Sans"/>
+
                 <Label Text="{Binding Type}" TextColor="#666" FontSize="Small" FontFamily="Open Sans"/>
                 <Label Text="{Binding Description}" TextColor="#666" FontSize="Small" FontFamily="Open Sans"/>
               </StackLayout>

@@ -1,33 +1,33 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Ravlyk.Views.DishView" BackgroundColor="White"  Title="{Binding Title}">
+             x:Class="Ravlyk.Views.DishView" BackgroundColor="White"  Title="{Binding Dish.Title}">
 
   <ContentPage.ToolbarItems>
-    <ToolbarItem Icon="{Binding Basket}" Command="{Binding ClickBasketCommand}"/>
+    <ToolbarItem Icon="basket.png" Command="{Binding ClickBasketCommand}"/>
   </ContentPage.ToolbarItems>
-  <StackLayout HorizontalOptions="Center" >
+  <StackLayout HorizontalOptions="Center" Spacing="-7" >
 
     <StackLayout Spacing="20">
       <StackLayout Spacing="-25">
-        <Image Source="{Binding ImagePath}" WidthRequest="350" HeightRequest="350" HorizontalOptions="Center"/>
+        <Image Source="{Binding Dish.ImagePath}" WidthRequest="350" HeightRequest="350" HorizontalOptions="Center"/>
         <StackLayout Orientation="Horizontal" Spacing="-5">
           <ContentView Padding="10,5,10,0" BackgroundColor="#999"  WidthRequest="240">
-            <Label Text="{Binding Title}" TextColor="#fff" FontSize="Medium"/>
+            <Label Text="{Binding Dish.Title}" TextColor="#fff" FontSize="Medium"/>
           </ContentView >
           <ContentView BackgroundColor="#229ac8" Padding="30,0,-30,0" WidthRequest="135" HorizontalOptions="End">
-            <Label Text="{Binding Price}" TextColor="#fff" FontSize="Large"/>
+            <Label Text="{Binding Dish.Price}" TextColor="#fff" FontSize="Large"/>
           </ContentView>
         </StackLayout>
       </StackLayout>
     </StackLayout>
 
     <StackLayout Spacing="20">
-      <Label Text="{Binding Description}" FontSize="Medium" TextColor="#666" HorizontalOptions="Center"/>
-      <Button Text="В корзину" BackgroundColor="#229ac8" TextColor="#ffffff" Command="{Binding AddDishCommand}"
-             HorizontalOptions="CenterAndExpand"/>
+      <Label Text="{Binding Dish.Description}" FontSize="Medium" TextColor="#666" HorizontalOptions="CenterAndExpand"/>
+     
     </StackLayout>
-
+    <Button Text="В корзину" BackgroundColor="#229ac8" TextColor="#ffffff" Command="{Binding AddDishCommand}"
+                HorizontalOptions="CenterAndExpand" VerticalOptions="EndAndExpand"/>
 
   </StackLayout>
 

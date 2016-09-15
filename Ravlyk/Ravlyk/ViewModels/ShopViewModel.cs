@@ -2,16 +2,15 @@
 using Caliburn.Micro.Xamarin.Forms;
 using Ravlyk.Models;
 using Ravlyk.Services;
-using Ravlyk.Views;
-using System.Collections.Generic;
-using System.Windows.Input;
-using Xamarin.Forms;
+using System.Collections.ObjectModel;
 
 namespace Ravlyk.ViewModels
 {
     public class ShopViewModel : Screen
     {
         public string ShopId { get; set; }
+       
+
 
         private ShopModel _shop;
         public ShopModel Shop
@@ -37,11 +36,28 @@ namespace Ravlyk.ViewModels
             _navigationService = navigationService;
         }
 
+        private CategoryModel _selectedCategory;
+        public CategoryModel SelectedCategory
+        {
+            get
+            {
+                return _selectedCategory;
+            }
+
+            set
+            {
+                if (value == null)
+                    return;
+                _navigationService.For<CategoryViewModel>().WithParam(x => x.CategoryId, value.Id).WithParam(x => x.ShopId, ShopId).Navigate();
+
+            }
+        }
+
         protected override void OnActivate()
         {
             base.OnActivate();
             Shop = _dataService.LoadShopModelById(ShopId);
-            
+
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Ravlyk.Views
         public ShopView()
         {
             InitializeComponent();
-            NavigationPage.SetHasBackButton(this, false);
+           
         }
     }
 }

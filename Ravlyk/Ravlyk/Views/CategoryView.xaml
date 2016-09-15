@@ -1,15 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Ravlyk.Views.CategoryView" BackgroundColor="White" Title="{Binding Title}">
+             x:Class="Ravlyk.Views.CategoryView" BackgroundColor="White" Title="{Binding Category.Title}">
 
   <ContentPage.ToolbarItems>
-    <ToolbarItem Icon="{Binding Basket}" Command="{Binding ClickBasketCommand}"/>
+    <ToolbarItem Icon="basket.png"/>
   </ContentPage.ToolbarItems>
 
 
   <StackLayout>
-    <ListView ItemsSource="{Binding Dishes}" SeparatorColor="White"
+    <ListView ItemsSource="{Binding Category.Dishes}" SeparatorColor="White"
               SelectedItem="{Binding SelectedDish}" HasUnevenRows="True" >
       <ListView.ItemTemplate>
         <DataTemplate>

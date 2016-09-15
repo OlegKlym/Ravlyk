@@ -1,5 +1,4 @@
-﻿using Ravlyk.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,16 +8,11 @@ using Xamarin.Forms;
 
 namespace Ravlyk.Views
 {
-    public partial class CategoryView : ContentPage
-    {
-        public CategoryView(CategoryViewModel vm)
-        {
-            InitializeComponent();
-            vm.Navigation = Navigation;
-            NavigationPage.SetHasBackButton(this, false);
-            BindingContext = vm;
-           
-        }
-
-    }
+	public partial class CategoryView : ContentPage
+	{
+		public CategoryView ()
+		{
+			InitializeComponent ();
+		}
+	}
 }

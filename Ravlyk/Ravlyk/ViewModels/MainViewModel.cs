@@ -4,9 +4,7 @@ using Ravlyk.Models;
 using Ravlyk.Services;
 using Ravlyk.Views;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace Ravlyk.ViewModels
@@ -45,11 +43,11 @@ namespace Ravlyk.ViewModels
             {
                 if (value == null)
                     return;
-
                     if (value.Categories.Count == 1)
                     {
-                        _navigationService.For<ShopViewModel>().WithParam(x => x.ShopId, value.Id).Navigate();
-                    }
+
+                    _navigationService.For<CategoryViewModel>().WithParam(x => x.CategoryId, value.Categories[0].Id).WithParam(x => x.ShopId, value.Id).Navigate();
+                }
 
                     else
                     {
@@ -60,8 +58,7 @@ namespace Ravlyk.ViewModels
 
         protected override void OnActivate()
         {
-            base.OnActivate();
-
+            base.OnActivate();          
             // TODO: show progress indicator
             LoadDataAsync();
             // TODO: hide progress indicator

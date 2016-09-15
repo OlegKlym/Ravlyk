@@ -1,88 +1,64 @@
-﻿using Ravlyk.Models;
+﻿using Caliburn.Micro;
+using Caliburn.Micro.Xamarin.Forms;
+using Ravlyk.Models;
 using Ravlyk.Services;
-using Ravlyk.Views;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Xamarin.Forms;
 
 namespace Ravlyk.ViewModels
 {
-    public class CategoryViewModel
+    public class CategoryViewModel : Screen
     {
-        public INavigation Navigation { get; set; }
-        public ICommand ClickBasketCommand { protected set; get; }
-        public CategoryModel Category { get; private set; }
+        public string CategoryId { get; set ; }
+        public string ShopId { get; set; }
 
-        DishViewModel selectedDish;
-
-        public CategoryViewModel()
-        {
-            Category = new CategoryModel();
-            ClickBasketCommand = new Command(ClickedBasket);
-        }
-
-        public string Title
-        {
-            get { return Category.Title; }
-            set { Category.Title = value; }
-        }
-
-        public string ImagePath
-        {
-            get { return Category.ImagePath; }
-            set { Category.ImagePath = value; }
-        }
-
-        public List<DishViewModel> Dishes
-        {
-            get { return Category.Dishes; }
-            set { Category.Dishes = value; }
-        }
-
-
-        public void ClickedBasket()
-        {
-            try { Navigation.PushAsync(new OrderView()); }
-            catch { }
-        }
-
-        public string Basket
+        private CategoryModel _category;
+        public CategoryModel Category
         {
             get
             {
-                if (OrderService.Instance.GetOrders() == null)
-                {
-                    return "basket.png";
-                }
-                else
-                {
-                    if (OrderService.Instance.GetOrders().Count == 0)
-                        return "basket.png";
-                    else
-                        return  "plus.png";
-                }
+                return _category;
             }
-            set { Basket = value; }
+
+            set
+            {
+                _category = value;
+                NotifyOfPropertyChange(() => Category);
+            }
+        }
+
+        private readonly DataService _dataService;
+        private readonly INavigationService _navigationService;
+
+        public CategoryViewModel(DataService dataService, INavigationService navigationService)
+        {
+            _dataService = dataService;
+            _navigationService = navigationService;
+        }
+
+        private DishModel _selectedDish;
+        public DishModel SelectedDish
+        {
+            get
+            {
+                return _selectedDish;
+            }
+
+            set
+            {
+                if (value == null)
+                    return;
+                _navigationService.For<DishViewModel>().WithParam(x => x.DishId, value.Id).
+                    WithParam(x => x.CategoryId, CategoryId).WithParam(x => x.ShopId, ShopId).Navigate();
+
+            }
         }
 
 
-        public DishViewModel SelectedDish
+        protected override void OnActivate()
         {
-            get { return selectedDish; }
-            set
-            {
-                if (selectedDish != value)
-                {
-                    DishViewModel tempDish = value;
-                    selectedDish = null;
-                    Navigation.PushAsync(new DishView(tempDish));
+            base.OnActivate();
+            
+            Category = _dataService.LoadCategoryModelById(ShopId, CategoryId);
 
-                }
-            }
         }
     }
 }

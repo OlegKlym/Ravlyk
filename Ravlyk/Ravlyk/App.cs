@@ -24,10 +24,13 @@ namespace Ravlyk
             container
                 .PerRequest<MainViewModel>()
                 .PerRequest<ShopViewModel>()
-                //.PerRequest<CategoryViewModel>()
-                //.PerRequest<DishViewModel>()
-                //.PerRequest<OrderViewModel>()
+                .PerRequest<CategoryViewModel>()
+                .PerRequest<DishViewModel>()
+                .PerRequest<OrderViewModel>()
+                .PerRequest<FormViewModel>()
+                .Singleton<OrderService>()
                 .Singleton<DataService>();
+
 
             Initialize();
 
