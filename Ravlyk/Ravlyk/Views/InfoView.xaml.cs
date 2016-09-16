@@ -1,5 +1,4 @@
-﻿using Ravlyk.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,12 +8,11 @@ using Xamarin.Forms;
 
 namespace Ravlyk.Views
 {
-    public partial class MainView : ContentPage
+    public partial class InfoView : ContentPage
     {
-        public MainView()
+        public InfoView()
         {
             InitializeComponent();
-            
         }
     }
 }

@@ -15,7 +15,7 @@ using Android.App;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
-
+[assembly: UsesFeature("android.hardware.wifi", Required = false)]
 #if DEBUG
 //[assembly: Application(Debuggable = true)]
 #else

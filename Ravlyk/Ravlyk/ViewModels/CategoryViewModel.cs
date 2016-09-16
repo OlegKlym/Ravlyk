@@ -2,6 +2,8 @@
 using Caliburn.Micro.Xamarin.Forms;
 using Ravlyk.Models;
 using Ravlyk.Services;
+using System.Windows.Input;
+using Xamarin.Forms;
 
 namespace Ravlyk.ViewModels
 {
@@ -9,6 +11,7 @@ namespace Ravlyk.ViewModels
     {
         public string CategoryId { get; set ; }
         public string ShopId { get; set; }
+        public ICommand ClickBasketCommand { set; get; }
 
         private CategoryModel _category;
         public CategoryModel Category
@@ -32,6 +35,7 @@ namespace Ravlyk.ViewModels
         {
             _dataService = dataService;
             _navigationService = navigationService;
+            ClickBasketCommand = new Command(ClickBasket);
         }
 
         private DishModel _selectedDish;
@@ -52,6 +56,27 @@ namespace Ravlyk.ViewModels
             }
         }
 
+        public string _basket;
+        public string Basket
+        {
+            get
+            {
+                if( IoC.Get<OrderService>().GetOrders().Count == 0)
+                    return "basket.png";
+                else
+                    return "plus.png";
+            }
+            set
+            {
+                _basket = value;
+                NotifyOfPropertyChange(() => Basket);
+            }
+        }
+
+        protected void ClickBasket()
+        {
+            _navigationService.For<OrderViewModel>().WithParam(x => x.TotalPrice, IoC.Get<OrderService>().GetTotalPrice()).Navigate();
+        }
 
         protected override void OnActivate()
         {

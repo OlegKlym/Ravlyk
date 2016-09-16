@@ -1,12 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Ravlyk.Views.FormView">
+             x:Class="Ravlyk.Views.FormView"  Title="Деталі Доставки">
   <StackLayout>
     <TableView>
       <TableView.Root>
         <TableRoot>
-          <TableSection Title="Деталі Доставки">
+          <TableSection>
 
             <EntryCell Keyboard="Default" Placeholder="Ваше ім'я" />
 

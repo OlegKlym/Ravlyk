@@ -1,19 +1,23 @@
 ﻿using Caliburn.Micro;
 using Caliburn.Micro.Xamarin.Forms;
+using Ravlyk.Events;
 using Ravlyk.Models;
 using Ravlyk.Services;
+using Ravlyk.Views;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Xamarin.Forms;
+using System;
 
 namespace Ravlyk.ViewModels
 {
-    public class OrderViewModel : Screen
+    public class OrderViewModel : Screen, IHandle<ProductUpdate>
     {
         public ICommand ClearOrdersCommand { set; get; }
         public ICommand ConfirmCommand { set; get; }
-      
 
+
+      
         private ObservableCollection<OrderModel> _orders;
         public ObservableCollection<OrderModel> Orders
         {
@@ -28,54 +32,69 @@ namespace Ravlyk.ViewModels
         private int _totalPrice;
         public int TotalPrice
         {
-            get { return OrderService.Instance.GetTotalPrice(); }
+            get { return IoC.Get<OrderService>().GetTotalPrice();}
             set
             {
-                OrderService.Instance.SetTotalPrice();
+                _totalPrice = value ;
                 NotifyOfPropertyChange(() => TotalPrice);
             }
         }
 
+        private string _text;
+        public string Text
+        {
+            get { return _text; }
+            set { _text = value;
+                NotifyOfPropertyChange(() => Text);
+            }
+        }
 
         private readonly DataService _dataService;
         private readonly INavigationService _navigationService;
+        private readonly IEventAggregator _eventAggregator;
 
         public OrderViewModel()
         {
-
+           
         }
-        public OrderViewModel(DataService dataService, INavigationService navigationService)
+        public OrderViewModel(DataService dataService, INavigationService navigationService, IEventAggregator eventAggregator)
         {
             _dataService = dataService;
             _navigationService = navigationService;
+            _eventAggregator = eventAggregator;
             ClearOrdersCommand = new Command(ClearOrders);
             ConfirmCommand = new Command(Confirm);
-           
+            NavigationPage.SetHasBackButton(new MainView(), false);
         }
 
         public void ClearOrders()
         {
-            OrderService.Instance.ClearOrders();
-            _navigationService.For<MainViewModel>().Navigate();
+            IoC.Get<OrderService>().ClearOrders();
+            _navigationService.GoBackToRootAsync();
         }
 
         public void Confirm()
         {
-            if(IoC.Get<OrderService>().GetTotalPrice() > 69)
-                _navigationService.For<FormViewModel>().Navigate();
+
+            Text = "Дана функція поки  в розробці";
+            //if(IoC.Get<OrderService>().GetTotalPrice() > 69)
+            //     _navigationService.For<FormViewModel>().Navigate(); 
         }
-
-       
-
+      
         protected override void OnActivate()
         {
+          
             base.OnActivate();
-            Orders = OrderService.Instance.GetOrders();
+
+            _eventAggregator.Subscribe(this);
+
+            Orders = IoC.Get<OrderService>().GetOrders();
+           
         }
 
-
-
-
-
+        public void Handle(ProductUpdate message)
+        {
+            TotalPrice = _totalPrice;
+        }
     }
 }

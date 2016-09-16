@@ -37,6 +37,23 @@ namespace Ravlyk.ViewModels
             }
         }
 
+        public string Basket
+        {
+            get
+            {
+                if (IoC.Get<OrderService>().GetOrders().Count == 0)
+                    return "basket.png";
+                else
+                    return "plus.png";
+            }
+            set
+            {
+                _basket = value;
+                NotifyOfPropertyChange(() => Basket);
+            }
+        }
+
+
         private readonly DataService _dataService;
         private readonly INavigationService _navigationService;
 
@@ -49,17 +66,21 @@ namespace Ravlyk.ViewModels
 
         }
 
+        public string _basket;
+
         protected void AddDish()
         {
-            OrderService.Instance.AddDish(Dish);
-            OrderService.Instance.SetTotalPrice();
+            IoC.Get<OrderService>().AddDish(Dish);
+            if (IoC.Get<OrderService>().GetOrders().Count == 0)
+                Basket = "basket.png";
+            else
+                Basket = "plus.png";
         }
 
         protected void ClickBasket()
         {
-            _navigationService.For<OrderViewModel>().Navigate();
+            _navigationService.For<OrderViewModel>().WithParam(x => x.TotalPrice, IoC.Get<OrderService>().GetTotalPrice()).Navigate();
         }
-
 
         protected override void OnActivate()
         {

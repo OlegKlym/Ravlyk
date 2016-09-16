@@ -3,13 +3,15 @@ using Caliburn.Micro.Xamarin.Forms;
 using Ravlyk.Models;
 using Ravlyk.Services;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
+using Xamarin.Forms;
 
 namespace Ravlyk.ViewModels
 {
     public class ShopViewModel : Screen
     {
         public string ShopId { get; set; }
-       
+        public ICommand ClickBasketCommand { set; get; }
 
 
         private ShopModel _shop;
@@ -34,6 +36,24 @@ namespace Ravlyk.ViewModels
         {
             _dataService = dataService;
             _navigationService = navigationService;
+            ClickBasketCommand = new Command(ClickBasket);
+        }
+
+        public string _basket;
+        public string Basket
+        {
+            get
+            {
+                if (IoC.Get<OrderService>().GetOrders().Count == 0)
+                    return "basket.png";
+                else
+                    return "plus.png";
+            }
+            set
+            {
+                _basket = value;
+                NotifyOfPropertyChange(() => Basket);
+            }
         }
 
         private CategoryModel _selectedCategory;
@@ -51,6 +71,11 @@ namespace Ravlyk.ViewModels
                 _navigationService.For<CategoryViewModel>().WithParam(x => x.CategoryId, value.Id).WithParam(x => x.ShopId, ShopId).Navigate();
 
             }
+        }
+
+        protected void ClickBasket()
+        {
+            _navigationService.For<OrderViewModel>().WithParam(x => x.TotalPrice, IoC.Get<OrderService>().GetTotalPrice()).Navigate();
         }
 
         protected override void OnActivate()

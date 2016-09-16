@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using Caliburn.Micro.Xamarin.Forms;
+using Ravlyk.Events;
 using Ravlyk.Services;
 using Ravlyk.ViewModels;
 using System;
@@ -14,7 +15,7 @@ using Xamarin.Forms;
 
 namespace Ravlyk.Models
 {
-    public class OrderModel : Screen
+    public class OrderModel : PropertyChangedBase
     {
         public DishModel Dish { get; set; }
         private int _count;
@@ -27,6 +28,7 @@ namespace Ravlyk.Models
                 NotifyOfPropertyChange(() => Count);
             }
         }
+
         public ICommand StepperDecCommand { set; get; }
         public ICommand StepperIncCommand { set; get; }
         public ICommand DeleteOrderCommand { set; get; }
@@ -41,33 +43,32 @@ namespace Ravlyk.Models
         public void StepperInc(object orderObject)
         {
             OrderModel orderItem = orderObject as OrderModel;
-            OrderService.Instance.StepperInc(orderItem);
+            IoC.Get<OrderService>().StepperInc(orderItem);
 
+            IoC.Get<IEventAggregator>().PublishOnUIThread(new ProductUpdate());
         }
 
         public void StepperDec(object orderObject)
         {
             OrderModel orderItem = orderObject as OrderModel;
-            OrderService.Instance.StepperDec(orderItem);
+            IoC.Get<OrderService>().StepperDec(orderItem);
+            IoC.Get<IEventAggregator>().PublishOnUIThread(new ProductUpdate());
 
         }
-
-
 
         public void DeleteOrder(object orderObject)
         {
             OrderModel orderItem = orderObject as OrderModel;
             if (orderItem != null)
             {
-                OrderService.Instance.DeleteOrder(orderItem);
+                IoC.Get<OrderService>().DeleteOrder(orderItem);
             }
 
             if (IoC.Get<OrderService>().GetOrders().Count == 0)
             {
-                IoC.Get<INavigationService>().For<MainViewModel>().Navigate();
+                IoC.Get<INavigationService>().GoBackToRootAsync();
                
             }
-
         }
 
     }

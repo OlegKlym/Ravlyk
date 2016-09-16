@@ -1,16 +1,28 @@
-﻿using Caliburn.Micro;
+﻿using Acr.UserDialogs;
+using Android.App;
+using Android.Views;
+using Android.Widget;
+using Caliburn.Micro;
 using Caliburn.Micro.Xamarin.Forms;
+using Plugin.Connectivity;
 using Ravlyk.Models;
 using Ravlyk.Services;
 using Ravlyk.Views;
+using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace Ravlyk.ViewModels
 {
     public class MainViewModel : Screen
     {
+        public bool IsConnected { get; }
+        public ICommand ClickBasketCommand { set; get; }
+        public ICommand ClickInfoCommand { set; get; }
+
+
         private ObservableCollection<ShopModel> _shops;
         public ObservableCollection<ShopModel> Shops
         {
@@ -27,8 +39,11 @@ namespace Ravlyk.ViewModels
 
         public MainViewModel(DataService dataService, INavigationService navigationService)
         {
+           
             _dataService = dataService;
             _navigationService = navigationService;
+            ClickBasketCommand = new Command(ClickBasket);
+            ClickInfoCommand = new Command(ClickInfo);
         }
 
         public ShopModel _selectedShop;
@@ -56,12 +71,55 @@ namespace Ravlyk.ViewModels
             }
         }
 
-        protected override void OnActivate()
+        public string _basket;
+        public string Basket
         {
-            base.OnActivate();          
-            // TODO: show progress indicator
-            LoadDataAsync();
-            // TODO: hide progress indicator
+            get
+            {
+                if (IoC.Get<OrderService>().GetOrders().Count == 0)
+                    return "basket.png";
+                else
+                    return "plus.png";
+            }
+            set
+            {
+                _basket = value;
+                NotifyOfPropertyChange(() => Basket);
+            }
+        }
+
+        private string _internet;
+        public string Internet
+        {
+            get { return _internet; }
+            set { _internet = value;
+                NotifyOfPropertyChange(() => Internet);
+            }
+        }
+
+        protected void ClickBasket()
+        {
+            _navigationService.For<OrderViewModel>().WithParam(x => x.TotalPrice, IoC.Get<OrderService>().GetTotalPrice()).Navigate();
+        }
+
+        protected void ClickInfo()
+        {
+            _navigationService.For<InfoViewModel>().Navigate();
+        }
+
+
+      
+        protected override void OnActivate()
+        {        
+            base.OnActivate();
+            if (CrossConnectivity.Current.IsConnected)
+                LoadDataAsync();
+            else
+            {
+                Internet = "Відсутнє з'єднання з інтернетом!";
+            }
+
+
         }
 
         private async Task LoadDataAsync()

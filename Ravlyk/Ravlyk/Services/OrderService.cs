@@ -27,7 +27,6 @@ namespace Ravlyk.Services
             }
         }
 
-
         public ObservableCollection<OrderModel> GetOrders()
         {
             return _orders;
@@ -40,17 +39,26 @@ namespace Ravlyk.Services
                 if (item.Dish == dish)
                 {
                     item.Count++;
+                    string text = Regex.Replace(item.Dish.Price, "[^0-9]", "", RegexOptions.Singleline);
+                    _totalPrice += int.Parse(text);
                     isContains = true;
                     break;
                 }
 
             if (!isContains)
-                _orders.Add(new OrderModel() { Dish = dish, Count = 1});
+            {
+                string text = Regex.Replace(dish.Price, "[^0-9]", "", RegexOptions.Singleline);
+                _totalPrice += int.Parse(text);
+                _orders.Add(new OrderModel() { Dish = dish, Count = 1 });
+               
+            }
+                
         }
 
         public void ClearOrders()
         {
             _orders.Clear();
+            _totalPrice = 0;
         }
 
         public void StepperInc(OrderModel order)
@@ -59,6 +67,8 @@ namespace Ravlyk.Services
                 if (item.Dish == order.Dish)
                 {
                     item.Count++;
+                    string text = Regex.Replace(item.Dish.Price, "[^0-9]", "", RegexOptions.Singleline);
+                    _totalPrice += int.Parse(text);
                     break;
                 }
         }
@@ -69,6 +79,8 @@ namespace Ravlyk.Services
                 if (item.Dish == order.Dish && item.Count > 1)
                 {
                     item.Count--;
+                    string text = Regex.Replace(item.Dish.Price, "[^0-9]", "", RegexOptions.Singleline);
+                    _totalPrice -= int.Parse(text);
                     break;
                 }
         }
@@ -76,18 +88,13 @@ namespace Ravlyk.Services
         public void DeleteOrder(OrderModel order)
         {
             _orders.Remove(order);
-        }
-
-        public void SetTotalPrice()
-        {
-            _totalPrice = 0;
-            foreach (var item in _orders)
+            if (_orders.Count == 0)
             {
-                string text = Regex.Replace(item.Dish.Price, "[^0-9]", "", RegexOptions.Singleline);
-                _totalPrice += (int.Parse(text) * item.Count);
+                _totalPrice = 0;
+
             }
         }
-
+     
         public int GetTotalPrice()
         {
             return _totalPrice;
