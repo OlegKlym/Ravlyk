@@ -49,7 +49,7 @@ namespace Ravlyk.ViewModels
             }
         }
 
-        private readonly DataService _dataService;
+        private readonly WebService _dataService;
         private readonly INavigationService _navigationService;
         private readonly IEventAggregator _eventAggregator;
 
@@ -57,7 +57,7 @@ namespace Ravlyk.ViewModels
         {
            
         }
-        public OrderViewModel(DataService dataService, INavigationService navigationService, IEventAggregator eventAggregator)
+        public OrderViewModel(WebService dataService, INavigationService navigationService, IEventAggregator eventAggregator)
         {
             _dataService = dataService;
             _navigationService = navigationService;

@@ -10,7 +10,7 @@ namespace Ravlyk.ViewModels
 {
     public class ShopViewModel : Screen
     {
-        public string ShopId { get; set; }
+        public int ShopId { get; set; }
         public ICommand ClickBasketCommand { set; get; }
 
 
@@ -29,10 +29,10 @@ namespace Ravlyk.ViewModels
             }
         }
 
-        private readonly DataService _dataService;
+        private readonly WebService _dataService;
         private readonly INavigationService _navigationService;
 
-        public ShopViewModel(DataService dataService, INavigationService navigationService)
+        public ShopViewModel(WebService dataService, INavigationService navigationService)
         {
             _dataService = dataService;
             _navigationService = navigationService;

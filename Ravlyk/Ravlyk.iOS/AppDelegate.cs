@@ -4,6 +4,7 @@ using System.Linq;
 
 using Foundation;
 using UIKit;
+using Caliburn.Micro;
 
 namespace Ravlyk.iOS
 {
@@ -23,7 +24,7 @@ namespace Ravlyk.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
-            LoadApplication(new App());
+            LoadApplication(new App((IoC.Get<SimpleContainer>())));
 
             return base.FinishedLaunching(app, options);
         }

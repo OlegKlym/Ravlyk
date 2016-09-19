@@ -12,6 +12,7 @@ namespace Ravlyk
 
     public class App : FormsApplication
     {
+       
         private readonly SimpleContainer container;
 
         public App(SimpleContainer container)
@@ -26,9 +27,11 @@ namespace Ravlyk
                 .PerRequest<OrderViewModel>()
                 .PerRequest<FormViewModel>()
                 .PerRequest<InfoViewModel>()
+                .PerRequest<ISQLiteService>()
                 .Singleton<IEventAggregator, EventAggregator>()
                 .Singleton<OrderService>()
-                .Singleton<DataService>();
+                .Singleton<WebService>()
+                .Singleton<DatabaseService>();
 
 
             Initialize();

@@ -1,4 +1,5 @@
-﻿using HtmlAgilityPack;
+﻿using Caliburn.Micro;
+using HtmlAgilityPack;
 using Ravlyk.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace Ravlyk.Services
 {
-    public class DataService
+    public class WebService
     {
         private List<ShopModel> _shops = new List<ShopModel>();
 
-        public async Task<ShopModel> LoadShopAsync(string url, string shopId)
+        public async Task<ShopModel> LoadShopAsync(string url, int shopId)
         {
             var existingShop = _shops.FirstOrDefault(x => x.Id == shopId);
             if (existingShop != null)
@@ -35,11 +36,11 @@ namespace Ravlyk.Services
             };
 
             _shops.Add(shop);
-
+        
             return shop;
         }
 
-        public ShopModel LoadShopModelById(string shopId)
+        public ShopModel LoadShopModelById(int shopId)
         {
             return _shops.FirstOrDefault(x => x.Id == shopId);
         }
@@ -75,7 +76,7 @@ namespace Ravlyk.Services
             return _categories;
         }
 
-        public CategoryModel LoadCategoryModelById(string shopId, string categoryId)
+        public CategoryModel LoadCategoryModelById(int shopId, string categoryId)
         {
             var shop = LoadShopModelById(shopId);
             return shop.Categories.FirstOrDefault(x => x.Id == categoryId);
@@ -103,11 +104,15 @@ namespace Ravlyk.Services
             return _dishes;
         }
 
-        public DishModel LoadDishModelById(string shopId, string categoryId, string dishId)
+        public DishModel LoadDishModelById(int shopId, string categoryId, string dishId)
         {
             var category = LoadCategoryModelById(shopId, categoryId);
             return category.Dishes.FirstOrDefault(x => x.Id == dishId);
           
+        }
+        public List<ShopModel> GetShops()
+        {
+            return _shops;
         }
 
         private async static Task<HtmlNode> LoadHtml(string url)
