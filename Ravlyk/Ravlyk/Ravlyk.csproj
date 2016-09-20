@@ -36,6 +36,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
+    <Compile Include="Entities\CategoryEntity.cs" />
+    <Compile Include="Entities\DishEntity.cs" />
     <Compile Include="Entities\ShopEntity.cs" />
     <Compile Include="Events\ProductUpdate.cs" />
     <Compile Include="Services\DatabaseService.cs" />

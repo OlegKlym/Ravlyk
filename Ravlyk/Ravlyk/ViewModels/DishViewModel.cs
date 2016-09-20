@@ -17,7 +17,7 @@ namespace Ravlyk.ViewModels
     public class DishViewModel : Screen
     {
         public string DishId { get; set; }
-        public string CategoryId { get; set; }
+        public int CategoryId { get; set; }
         public int ShopId { get; set; }
         public ICommand AddDishCommand { set; get; }
         public ICommand ClickBasketCommand { set; get; }

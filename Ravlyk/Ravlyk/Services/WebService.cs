@@ -64,7 +64,7 @@ namespace Ravlyk.Services
 
                         _categories.Add(new CategoryModel()
                         {
-                            Id = id.ToString(),
+                            Id = id,
                             ImagePath = item.ChildNodes[1].GetAttributeValue("src", ""),
                             Title = item.ChildNodes[3].InnerText,
                             Dishes = await GetDishes(url)
@@ -76,7 +76,7 @@ namespace Ravlyk.Services
             return _categories;
         }
 
-        public CategoryModel LoadCategoryModelById(int shopId, string categoryId)
+        public CategoryModel LoadCategoryModelById(int shopId, int categoryId)
         {
             var shop = LoadShopModelById(shopId);
             return shop.Categories.FirstOrDefault(x => x.Id == categoryId);
@@ -104,7 +104,7 @@ namespace Ravlyk.Services
             return _dishes;
         }
 
-        public DishModel LoadDishModelById(int shopId, string categoryId, string dishId)
+        public DishModel LoadDishModelById(int shopId, int categoryId, string dishId)
         {
             var category = LoadCategoryModelById(shopId, categoryId);
             return category.Dishes.FirstOrDefault(x => x.Id == dishId);
@@ -114,6 +114,7 @@ namespace Ravlyk.Services
         {
             return _shops;
         }
+
 
         private async static Task<HtmlNode> LoadHtml(string url)
         {

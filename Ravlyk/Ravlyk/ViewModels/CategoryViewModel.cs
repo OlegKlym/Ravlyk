@@ -9,7 +9,7 @@ namespace Ravlyk.ViewModels
 {
     public class CategoryViewModel : Screen
     {
-        public string CategoryId { get; set ; }
+        public int CategoryId { get; set ; }
         public int ShopId { get; set; }
         public ICommand ClickBasketCommand { set; get; }
 
