@@ -47,17 +47,14 @@ namespace Ravlyk.ViewModels
             {
                 if (value == null)
                     return;
-
                 if (value.Categories.Count == 1)
                 {
                     IoC.Get<INavigationService>().For<CategoryViewModel>().WithParam(x => x.CategoryId, value.Categories[0].Id).WithParam(x => x.ShopId, value.Id).Navigate();
                 }
-
                 else
                 {
                     IoC.Get<INavigationService>().For<ShopViewModel>().WithParam(x => x.ShopId, value.Id).Navigate();
                 }
-
 
             }
         }
@@ -116,9 +113,12 @@ namespace Ravlyk.ViewModels
             if (CrossConnectivity.Current.IsConnected)
             {
                 Database.ClearDB();
+                Database.Database.DropTable<ShopEntity>();
+                Database.Database.CreateTable<ShopEntity>();
                 if (Database.GetShops().Count == 0)
                 {
-                    LoadDataAsync();
+                    LoadShopsAsync();
+                   
                 }
                 else
                 {
@@ -139,7 +139,7 @@ namespace Ravlyk.ViewModels
             }
         }
 
-        public async Task LoadDataAsync()
+        public async Task LoadShopsAsync()
         {
             Database.InsertShop(await IoC.Get<WebService>().LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=63_147", 1));
             Database.InsertShop(await IoC.Get<WebService>().LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=72_81", 2));
@@ -159,9 +159,12 @@ namespace Ravlyk.ViewModels
             Database.InsertShop(await IoC.Get<WebService>().LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=155_157", 13));
             Database.InsertShop(await IoC.Get<WebService>().LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=163_169", 14));
             Database.InsertShop(await IoC.Get<WebService>().LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=161_162", 15));
- 
+           
             Shops = Database.GetShopsFromBD();
+           
         }
+
+      
     }
 }
 

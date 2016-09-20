@@ -45,7 +45,7 @@ namespace Ravlyk.Services
             return (from i in Database.Table<ShopEntity>() select i).ToList();
         }
 
-        public List<CategoryEntity> GetCategories(int shopId)
+        public List<CategoryEntity> GetCategories()
         {
             return (from i in Database.Table<CategoryEntity>() select i).ToList();
         }
@@ -63,9 +63,9 @@ namespace Ravlyk.Services
         public List<ShopModel> GetShopsFromBD()
         {
             var db = IoC.Get<DatabaseService>().GetShops();
-            List<ShopModel> Shops = new List<ShopModel>();
+            List<ShopModel> shops = new List<ShopModel>();
             foreach (var item in db)
-                Shops.Add(new ShopModel()
+                shops.Add(new ShopModel()
                 {
                     Id = item.Id,
                     ImagePath = item.ImagePath,
@@ -73,14 +73,30 @@ namespace Ravlyk.Services
                     Address = item.Address,
                     Type = item.Type,
                     Description = item.Description,
-                    Categories = IoC.Get<WebService>().LoadShopModelById(item.Id).Categories
+                    Categories =  GetCategoriesFromBD(item.Id)
                 });
-            return Shops;
+            return shops;
+        }
+
+        public List<CategoryModel> GetCategoriesFromBD(int shopId)
+        {
+            var db = IoC.Get<DatabaseService>().GetCategories();
+            List<CategoryModel> categories = new List<CategoryModel>();
+            foreach (var item in db)
+            {
+                if (item.Id_Shop == shopId)
+                    categories.Add(new CategoryModel()
+                    {
+                        Id = item.Id_Category,
+                        ImagePath = item.ImagePath,
+                        Title = item.Title
+                    });
+            }
+            return categories;
         }
 
         public void InsertShop(ShopModel shop)
         {
-           
             Database.Insert(new ShopEntity()
             {
                 ImagePath = shop.ImagePath,
@@ -91,16 +107,18 @@ namespace Ravlyk.Services
             });
         }
 
-        public void InsertCategory(ShopModel shop, int id)
+        public void InsertCategory(int shopId, int id)
         {
-            var category = IoC.Get<WebService>().LoadCategoryModelById(shop.Id, id);
-            
+            var category = IoC.Get<WebService>().LoadCategoryModelById(shopId, id);
+           
             Database.Insert(new CategoryEntity()
             {
-                Id_Shop = shop.Id,
+                Id_Shop = shopId,
                 ImagePath = category.ImagePath,
                 Title = category.Title
             });
         }
+
+       
     }
 }
