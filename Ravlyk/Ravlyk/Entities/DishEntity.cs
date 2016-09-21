@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SQLite;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,17 @@ using System.Threading.Tasks;
 
 namespace Ravlyk.Entities
 {
-    class DishEntity
+    [Table("Dishes")]
+    public class DishEntity
     {
+        [PrimaryKey, AutoIncrement, Column("_id")]
+        public int Id_Dish { get; set; }
+
+        public int Id_Category { get; set; }
+        public int Id_Shop { get; set; }
+        public string Title { get; set; }
+        public string Price { get; set; }
+        public string Description { get; set; }
+        public string ImagePath { get; set; }
     }
 }

@@ -10,6 +10,7 @@ namespace Ravlyk.Services
 {
     public class WebService
     {
+        public static int categoryId = 1;
         private List<ShopModel> _shops = new List<ShopModel>();
 
         public async Task<ShopModel> LoadShopAsync(string url, int shopId)
@@ -42,6 +43,7 @@ namespace Ravlyk.Services
 
         public ShopModel LoadShopModelById(int shopId)
         {
+            
             return _shops.FirstOrDefault(x => x.Id == shopId);
         }
           
@@ -51,7 +53,6 @@ namespace Ravlyk.Services
             List<CategoryModel> _categories = new List<CategoryModel>() { };
             var divList = root.Descendants().Where(n => n.GetAttributeValue("id", "").Equals("column-left")).Single().ChildNodes[1].ChildNodes;
             bool flag = false;
-            var id = 1;
             foreach (var item in divList)
             {
                 if (item.NodeType == HtmlNodeType.Element)
@@ -64,12 +65,12 @@ namespace Ravlyk.Services
 
                         _categories.Add(new CategoryModel()
                         {
-                            Id = id,
+                            Id = categoryId,
                             ImagePath = item.ChildNodes[1].GetAttributeValue("src", ""),
                             Title = item.ChildNodes[3].InnerText,
                             Dishes = await GetDishes(url)
                         });
-                        id++;
+                        categoryId++;
                     }
                 }
             }
@@ -92,7 +93,7 @@ namespace Ravlyk.Services
             {
                 _dishes.Add(new DishModel()
                 {
-                    Id = id.ToString(),
+                    Id = id,
                     ImagePath = item.ChildNodes[1].ChildNodes[0].GetAttributeValue("src", ""),
                     Title = (item.ChildNodes[3].ChildNodes[1].ChildNodes[1].InnerText.Contains("&quot;")) ?
                         item.ChildNodes[3].ChildNodes[1].ChildNodes[1].InnerText.Replace("&quot;", "''") : item.ChildNodes[3].ChildNodes[1].ChildNodes[1].InnerText,
@@ -104,7 +105,7 @@ namespace Ravlyk.Services
             return _dishes;
         }
 
-        public DishModel LoadDishModelById(int shopId, int categoryId, string dishId)
+        public DishModel LoadDishModelById(int shopId, int categoryId, int dishId)
         {
             var category = LoadCategoryModelById(shopId, categoryId);
             return category.Dishes.FirstOrDefault(x => x.Id == dishId);

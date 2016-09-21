@@ -12,7 +12,7 @@ namespace Ravlyk.ViewModels
     {
         public int ShopId { get; set; }
         public ICommand ClickBasketCommand { set; get; }
-        public DatabaseService Database { set; get; }
+        public DatabaseService _database;
 
         private ShopModel _shop;
         public ShopModel Shop
@@ -29,14 +29,14 @@ namespace Ravlyk.ViewModels
             }
         }
 
-        private readonly WebService _dataService;
+        private readonly WebService _webservice;
         private readonly INavigationService _navigationService;
 
-        public ShopViewModel(WebService dataService, INavigationService navigationService)
+        public ShopViewModel(WebService webservice, INavigationService navigationService)
         {
-            _dataService = dataService;
+            _webservice = webservice;
             _navigationService = navigationService;
-            Database = new DatabaseService();
+            _database = new DatabaseService();
             ClickBasketCommand = new Command(ClickBasket);
         }
 
@@ -82,21 +82,12 @@ namespace Ravlyk.ViewModels
         protected override void OnActivate()
         {
             base.OnActivate();
-            LoadCategories();
-            Shop = _dataService.LoadShopModelById(ShopId);
-
-        }
-
-        public void LoadCategories()
-        {
-            for (var i = 1; i <= 15; i++)
+            Shop = new ShopModel()
             {
-                var n = IoC.Get<WebService>().LoadShopModelById(i).Categories.Count;
-                for (var j = 1; j <= n; j++)
-                    Database.InsertCategory(i, j);
-            }
-            var list = Database.GetCategories();
-
+                Categories = _database.GetCategoriesFromBD(ShopId)
+            };                         
         }
+
+        
     }
 }

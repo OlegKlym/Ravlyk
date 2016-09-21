@@ -5,6 +5,7 @@ using Android.Widget;
 using Caliburn.Micro;
 using Caliburn.Micro.Xamarin.Forms;
 using Plugin.Connectivity;
+using Ravlyk.Entities;
 using Ravlyk.Models;
 using Ravlyk.Services;
 using Ravlyk.Views;
@@ -22,8 +23,7 @@ namespace Ravlyk.ViewModels
         public bool IsConnected { get; }
         public ICommand ClickBasketCommand { set; get; }
         public ICommand ClickInfoCommand { set; get; }
-        public DatabaseService Database { set; get; }
-
+        public DatabaseService _database;
         private List<ShopModel> _shops;
         public List<ShopModel> Shops
         {
@@ -47,15 +47,7 @@ namespace Ravlyk.ViewModels
             {
                 if (value == null)
                     return;
-                if (value.Categories.Count == 1)
-                {
-                    IoC.Get<INavigationService>().For<CategoryViewModel>().WithParam(x => x.CategoryId, value.Categories[0].Id).WithParam(x => x.ShopId, value.Id).Navigate();
-                }
-                else
-                {
                     IoC.Get<INavigationService>().For<ShopViewModel>().WithParam(x => x.ShopId, value.Id).Navigate();
-                }
-
             }
         }
 
@@ -89,10 +81,11 @@ namespace Ravlyk.ViewModels
 
         public MainViewModel()
         {
-            Database = new DatabaseService();
+            _database = new DatabaseService();
             Shops = new List<ShopModel>();
             ClickBasketCommand = new Command(ClickBasket);
             ClickInfoCommand = new Command(ClickInfo);
+           
         }
 
         protected void ClickBasket()
@@ -112,55 +105,59 @@ namespace Ravlyk.ViewModels
             base.OnActivate();
             if (CrossConnectivity.Current.IsConnected)
             {
-                Database.ClearDB();
-                Database.Database.DropTable<ShopEntity>();
-                Database.Database.CreateTable<ShopEntity>();
-                if (Database.GetShops().Count == 0)
+
+               
+                try
                 {
+                    _database.GetShops();
+                    Shops = _database.GetShopsFromBD();
+                }
+                catch
+                {
+                    _database.Database.CreateTable<ShopEntity>();
+                    _database.Database.CreateTable<CategoryEntity>();
+                    _database.Database.CreateTable<DishEntity>();
                     LoadShopsAsync();
-                   
+                  
                 }
-                else
-                {
-                    Shops = Database.GetShopsFromBD();
-                }
+
 
             }
             else
             {
-                if (Database.GetShops().Count == 0)
+                if (_database.GetShops().Count == 0)
                 {
                     Internet = "Відсутнє з'єднання з інтернетом!";
                 }
                 else
                 {
-                    Shops = Database.GetShopsFromBD();
+                    Shops = _database.GetShopsFromBD();
                 }
             }
         }
 
         public async Task LoadShopsAsync()
         {
-            Database.InsertShop(await IoC.Get<WebService>().LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=63_147", 1));
-            Database.InsertShop(await IoC.Get<WebService>().LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=72_81", 2));
-            Database.InsertShop(await IoC.Get<WebService>().LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=98_99", 3));
-            Database.InsertShop(await IoC.Get<WebService>().LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=59_62", 4));
+            _database.InsertShop(await IoC.Get<WebService>().LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=63_147", 1));
+            _database.InsertShop(await IoC.Get<WebService>().LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=72_81", 2));
+            _database.InsertShop(await IoC.Get<WebService>().LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=98_99", 3));
+            _database.InsertShop(await IoC.Get<WebService>().LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=59_62", 4));
 
-            Database.InsertShop(await IoC.Get<WebService>().LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=88_138", 5));
-            Database.InsertShop(await IoC.Get<WebService>().LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=76_77", 6));
-            Database.InsertShop(await IoC.Get<WebService>().LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=96_97", 7));
-            Database.InsertShop(await IoC.Get<WebService>().LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=92_105", 8));
+            _database.InsertShop(await IoC.Get<WebService>().LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=88_138", 5));
+            _database.InsertShop(await IoC.Get<WebService>().LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=76_77", 6));
+            _database.InsertShop(await IoC.Get<WebService>().LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=96_97", 7));
+            _database.InsertShop(await IoC.Get<WebService>().LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=92_105", 8));
 
-            Database.InsertShop(await IoC.Get<WebService>().LoadShopAsync(" http://ravlyk.club/index.php?route=product/category&path=90_91", 9));
-            Database.InsertShop(await IoC.Get<WebService>().LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=135_136", 10));
-            Database.InsertShop(await IoC.Get<WebService>().LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=94_95", 11));
-            Database.InsertShop(await IoC.Get<WebService>().LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=130_134", 12));
+            _database.InsertShop(await IoC.Get<WebService>().LoadShopAsync(" http://ravlyk.club/index.php?route=product/category&path=90_91", 9));
+            _database.InsertShop(await IoC.Get<WebService>().LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=135_136", 10));
+            _database.InsertShop(await IoC.Get<WebService>().LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=94_95", 11));
+            _database.InsertShop(await IoC.Get<WebService>().LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=130_134", 12));
 
-            Database.InsertShop(await IoC.Get<WebService>().LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=155_157", 13));
-            Database.InsertShop(await IoC.Get<WebService>().LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=163_169", 14));
-            Database.InsertShop(await IoC.Get<WebService>().LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=161_162", 15));
+            _database.InsertShop(await IoC.Get<WebService>().LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=155_157", 13));
+            _database.InsertShop(await IoC.Get<WebService>().LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=163_169", 14));
+            _database.InsertShop(await IoC.Get<WebService>().LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=161_162", 15));
            
-            Shops = Database.GetShopsFromBD();
+            Shops = _database.GetShopsFromBD();
            
         }
 

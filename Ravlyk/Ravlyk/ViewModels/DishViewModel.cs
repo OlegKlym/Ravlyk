@@ -16,7 +16,7 @@ namespace Ravlyk.ViewModels
 {
     public class DishViewModel : Screen
     {
-        public string DishId { get; set; }
+        public int DishId { get; set; }
         public int CategoryId { get; set; }
         public int ShopId { get; set; }
         public ICommand AddDishCommand { set; get; }
@@ -52,7 +52,7 @@ namespace Ravlyk.ViewModels
                 NotifyOfPropertyChange(() => Basket);
             }
         }
-
+        private DatabaseService _database;
 
         private readonly WebService _webService;
         private readonly INavigationService _navigationService;
@@ -61,6 +61,7 @@ namespace Ravlyk.ViewModels
         {
             _webService = webService;
             _navigationService = navigationService;
+            _database = new DatabaseService();
             AddDishCommand = new Command(AddDish);
             ClickBasketCommand = new Command(ClickBasket);
 
@@ -84,8 +85,8 @@ namespace Ravlyk.ViewModels
 
         protected override void OnActivate()
         {
-            base.OnActivate();           
-            Dish = _webService.LoadDishModelById(ShopId, CategoryId, DishId);
+            base.OnActivate();
+            Dish = _database.GetDish(DishId);
         }
     }
 }

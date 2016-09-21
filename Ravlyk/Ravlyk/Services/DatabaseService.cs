@@ -40,6 +40,72 @@ namespace Ravlyk.Services
 
         }
 
+        public void InsertShop(ShopModel shop)
+        {
+
+            Database.Insert(new ShopEntity()
+            {
+                ImagePath = shop.ImagePath,
+                Title = shop.Title,
+                Address = shop.Address,
+                Type = shop.Type,
+                Description = shop.Description
+            });
+            LoadCategories(shop);
+            LoadDishes(shop);
+
+        }
+
+
+        public void LoadCategories(ShopModel shop)
+        {
+            var n = GetCategories().Count + shop.Categories.Count;
+            for (var j = GetCategories().Count + 1; j <= n; j++)
+            {
+                InsertCategory(shop.Id, j);
+               
+            }
+               
+        }
+
+        public void InsertCategory(int shopId, int id)
+        {
+            var category = IoC.Get<WebService>().LoadCategoryModelById(shopId, id);
+
+            Database.Insert(new CategoryEntity()
+            {
+                Id_Shop = shopId,
+                ImagePath = category.ImagePath,
+                Title = category.Title
+            });
+        }
+
+        public void LoadDishes(ShopModel shop)
+        {
+            for (var i = GetCategories().Count - shop.Categories.Count + 1; i <= GetCategories().Count; i++)
+            {
+                var n = IoC.Get<WebService>().LoadCategoryModelById(shop.Id, i).Dishes.Count;
+                for (var j = 1; j <= n; j++)
+                    InsertDish(shop.Id, i, j);
+            }
+        }
+
+        public void InsertDish(int shopId, int categoryId, int id)
+        {
+            var dish = IoC.Get<WebService>().LoadDishModelById(shopId, categoryId, id);
+
+            Database.Insert(new DishEntity()
+            {
+                Id_Shop = shopId,
+                Id_Category = categoryId,
+                ImagePath = dish.ImagePath,
+                Title = dish.Title,
+                Price = dish.Price,
+                Description = dish.Description
+            });
+        }
+
+
         public List<ShopEntity> GetShops()
         {
             return (from i in Database.Table<ShopEntity>() select i).ToList();
@@ -50,14 +116,9 @@ namespace Ravlyk.Services
             return (from i in Database.Table<CategoryEntity>() select i).ToList();
         }
 
-        public ShopEntity GetItem(int id)
+        public List<DishEntity> GetDishes()
         {
-            return Database.Get<ShopEntity>(id);
-        }
-
-        public void ClearDB()
-        {
-            Database.DeleteAll<ShopEntity>();
+            return (from i in Database.Table<DishEntity>() select i).ToList();
         }
 
         public List<ShopModel> GetShopsFromBD()
@@ -73,7 +134,6 @@ namespace Ravlyk.Services
                     Address = item.Address,
                     Type = item.Type,
                     Description = item.Description,
-                    Categories =  GetCategoriesFromBD(item.Id)
                 });
             return shops;
         }
@@ -84,41 +144,67 @@ namespace Ravlyk.Services
             List<CategoryModel> categories = new List<CategoryModel>();
             foreach (var item in db)
             {
-                if (item.Id_Shop == shopId)
+                if(shopId == item.Id_Shop)
+                {
                     categories.Add(new CategoryModel()
                     {
                         Id = item.Id_Category,
                         ImagePath = item.ImagePath,
-                        Title = item.Title
+                        Title = item.Title,
+
                     });
+                }
+               
             }
             return categories;
         }
 
-        public void InsertShop(ShopModel shop)
+        public List<DishModel> GetDishesFromBD(int shopId,int categoryId)
         {
-            Database.Insert(new ShopEntity()
+            var db = IoC.Get<DatabaseService>().GetDishes();
+            List<DishModel> dishes = new List<DishModel>();
+            foreach (var item in db)
             {
-                ImagePath = shop.ImagePath,
-                Title = shop.Title,
-                Address = shop.Address,
-                Type = shop.Type,
-                Description = shop.Description
-            });
+                if(categoryId == item.Id_Category && shopId == item.Id_Shop)
+                {
+                    dishes.Add(new DishModel()
+                    {
+                        Id = item.Id_Dish,
+                        ImagePath = item.ImagePath,
+                        Title = item.Title,
+                        Price = item.Price,
+                        Description = item.Description
+                    });
+                }              
+            }
+            return dishes;
         }
 
-        public void InsertCategory(int shopId, int id)
+
+
+        public DishModel GetDish(int dishId)
         {
-            var category = IoC.Get<WebService>().LoadCategoryModelById(shopId, id);
-           
-            Database.Insert(new CategoryEntity()
+            var db = IoC.Get<DatabaseService>().GetDishes();
+            DishModel dish = new DishModel();
+            foreach (var item in db)
             {
-                Id_Shop = shopId,
-                ImagePath = category.ImagePath,
-                Title = category.Title
-            });
+                if (item.Id_Dish == dishId)
+                    return new DishModel()
+                    {
+                        Id = item.Id_Dish,
+                        ImagePath = item.ImagePath,
+                        Title = item.Title,
+                        Price = item.Price,
+                        Description = item.Description
+                    };
+            }
+            return null;
         }
 
        
+
+      
+
+
     }
 }

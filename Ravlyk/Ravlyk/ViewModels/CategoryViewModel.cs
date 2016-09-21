@@ -12,7 +12,7 @@ namespace Ravlyk.ViewModels
         public int CategoryId { get; set ; }
         public int ShopId { get; set; }
         public ICommand ClickBasketCommand { set; get; }
-
+        private DatabaseService _database;
         private CategoryModel _category;
         public CategoryModel Category
         {
@@ -35,6 +35,7 @@ namespace Ravlyk.ViewModels
         {
             _webService = webService;
             _navigationService = navigationService;
+            _database = new DatabaseService();
             ClickBasketCommand = new Command(ClickBasket);
         }
 
@@ -80,10 +81,14 @@ namespace Ravlyk.ViewModels
 
         protected override void OnActivate()
         {
-            base.OnActivate();
-            
-            Category = _webService.LoadCategoryModelById(ShopId, CategoryId);
+           base.OnActivate();
+            Category = new CategoryModel()
+            {
+                Dishes = _database.GetDishesFromBD(ShopId,CategoryId)
+            };
 
         }
+
+       
     }
 }
