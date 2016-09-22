@@ -20,6 +20,8 @@ namespace Ravlyk.ViewModels
         public int CategoryId { get; set; }
         public int ShopId { get; set; }
         public ICommand AddDishCommand { set; get; }
+        public ICommand AddToFavorCommand { set; get; }
+        public ICommand GetFavorCommand { set; get; }
         public ICommand ClickBasketCommand { set; get; }
 
         private DishModel _dish;
@@ -63,6 +65,8 @@ namespace Ravlyk.ViewModels
             _navigationService = navigationService;
             _database = new DatabaseService();
             AddDishCommand = new Command(AddDish);
+            AddToFavorCommand = new Command(AddToFavor);
+            GetFavorCommand = new Command(GetFavor);
             ClickBasketCommand = new Command(ClickBasket);
 
         }
@@ -78,10 +82,23 @@ namespace Ravlyk.ViewModels
                 Basket = "plus.png";
         }
 
+        protected void AddToFavor()
+        {
+            _database.SetFavor(DishId);
+        }
+
+        protected void GetFavor()
+        {
+            _database.GetFavor();
+            _navigationService.For<OrderViewModel>().WithParam(x => x.TotalPrice, IoC.Get<OrderService>().GetTotalPrice()).Navigate();
+        }
+
         protected void ClickBasket()
         {
             _navigationService.For<OrderViewModel>().WithParam(x => x.TotalPrice, IoC.Get<OrderService>().GetTotalPrice()).Navigate();
         }
+
+
 
         protected override void OnActivate()
         {

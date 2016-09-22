@@ -180,8 +180,6 @@ namespace Ravlyk.Services
             return dishes;
         }
 
-
-
         public DishModel GetDish(int dishId)
         {
             var db = IoC.Get<DatabaseService>().GetDishes();
@@ -201,10 +199,32 @@ namespace Ravlyk.Services
             return null;
         }
 
-       
+        public void SetFavor(int dishId)
+        {
+            var db = IoC.Get<DatabaseService>().GetDishes();
+            foreach (var item in db)
+                if (item.Id_Dish == dishId)
+                {
+                    item.Favourite = true;
+                    Database.Update(item);
+                }                
+        }
 
-      
-
+        public void GetFavor()
+        {
+            var db = IoC.Get<DatabaseService>().GetDishes();
+            DishModel dish = new DishModel();
+            foreach (var item in db)
+                if (item.Favourite)
+                    IoC.Get<OrderService>().AddDish(new DishModel()
+                    {
+                        Id = item.Id_Dish,
+                        ImagePath = item.ImagePath,
+                        Title = item.Title,
+                        Price = item.Price,
+                        Description = item.Description
+                    });
+        }
 
     }
 }

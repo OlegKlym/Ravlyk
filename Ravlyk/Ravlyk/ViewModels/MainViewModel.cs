@@ -105,8 +105,7 @@ namespace Ravlyk.ViewModels
             base.OnActivate();
             if (CrossConnectivity.Current.IsConnected)
             {
-
-               
+             
                 try
                 {
                     _database.GetShops();

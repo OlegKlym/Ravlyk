@@ -5,6 +5,7 @@
 
   <ContentPage.ToolbarItems >
     <ToolbarItem Icon="info.png" Command="{Binding ClickInfoCommand}"/>
+    <ToolbarItem Icon="Favourite.png"/>
     <ToolbarItem Icon="basket.png" Command="{Binding ClickBasketCommand}"/>
   </ContentPage.ToolbarItems>
 

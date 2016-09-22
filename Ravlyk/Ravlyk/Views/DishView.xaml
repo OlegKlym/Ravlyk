@@ -4,31 +4,36 @@
              x:Class="Ravlyk.Views.DishView" BackgroundColor="White"  Title="{Binding Dish.Title}">
 
   <ContentPage.ToolbarItems>
+    <ToolbarItem Icon="Favourite.png" Command="{Binding GetFavorCommand}"/>
     <ToolbarItem Icon="{Binding Basket}" Command="{Binding ClickBasketCommand}"/>
   </ContentPage.ToolbarItems>
-  <StackLayout HorizontalOptions="Center" Spacing="-5" >
+  <ScrollView>
+    <StackLayout HorizontalOptions="Center" Spacing="-5" >
 
-    <StackLayout Spacing="20">
-      <StackLayout Spacing="-25">
-        <Image Source="{Binding Dish.ImagePath}" WidthRequest="350" HeightRequest="350" HorizontalOptions="Center"/>
-        <StackLayout Orientation="Horizontal" Spacing="-5">
-          <ContentView Padding="10,5,10,0" BackgroundColor="#999"  WidthRequest="240">
-            <Label Text="{Binding Dish.Title}" TextColor="#fff" FontSize="Medium"/>
-          </ContentView >
-          <ContentView BackgroundColor="#229ac8" Padding="30,0,-30,0" WidthRequest="135" HorizontalOptions="End">
-            <Label Text="{Binding Dish.Price}" TextColor="#fff" FontSize="Large"/>
-          </ContentView>
+      <StackLayout Spacing="20">
+        <StackLayout Spacing="-25">
+          <Image Source="{Binding Dish.ImagePath}" WidthRequest="320" HeightRequest="320" HorizontalOptions="Center"/>
+          <StackLayout Orientation="Horizontal" Spacing="-5">
+            <ContentView Padding="10,5,10,0" BackgroundColor="#999"  WidthRequest="240">
+              <Label Text="{Binding Dish.Title}" TextColor="#fff" FontSize="Medium"/>
+            </ContentView >
+            <ContentView BackgroundColor="#229ac8" Padding="30,0,-30,0" WidthRequest="135" HorizontalOptions="End">
+              <Label Text="{Binding Dish.Price}" TextColor="#fff" FontSize="Large"/>
+            </ContentView>
+          </StackLayout>
         </StackLayout>
       </StackLayout>
+
+      <StackLayout Spacing="20" Padding="5,0">
+        <Label Text="{Binding Dish.Description}" FontSize="Medium" TextColor="#666" HorizontalOptions="CenterAndExpand"/>
+
+      </StackLayout>
+      <StackLayout Orientation="Horizontal"  HorizontalOptions="CenterAndExpand" VerticalOptions="End" Margin="0,25,0,0">
+        <Button Text="В улюблені" BackgroundColor="#da4f49" TextColor="#ffffff" Command="{Binding AddToFavorCommand}" />
+        <Button Text="В корзину" BackgroundColor="#229ac8" TextColor="#ffffff" Command="{Binding AddDishCommand}" />       
+      </StackLayout>
     </StackLayout>
-
-    <StackLayout Spacing="20" Padding="5,0">
-      <Label Text="{Binding Dish.Description}" FontSize="Medium" TextColor="#666" HorizontalOptions="CenterAndExpand"/>
-     
-    </StackLayout>
-    <Button Text="В корзину" BackgroundColor="#229ac8" TextColor="#ffffff" Command="{Binding AddDishCommand}"
-                HorizontalOptions="CenterAndExpand" VerticalOptions="EndAndExpand"/>
-
-  </StackLayout>
-
+  </ScrollView>
+  
+ 
 </ContentPage>
