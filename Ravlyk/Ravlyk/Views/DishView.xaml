@@ -29,8 +29,8 @@
 
       </StackLayout>
       <StackLayout Orientation="Horizontal"  HorizontalOptions="CenterAndExpand" VerticalOptions="End" Margin="0,25,0,0">
-        <Button Text="В улюблені" BackgroundColor="#da4f49" TextColor="#ffffff" Command="{Binding AddToFavorCommand}" />
-        <Button Text="В корзину" BackgroundColor="#229ac8" TextColor="#ffffff" Command="{Binding AddDishCommand}" />       
+        <Button Text="{Binding Favourite}" BackgroundColor="#da4f49" TextColor="#ffffff" Command="{Binding FavorCommand}" />
+        <Button Text="{Binding BasketTitle}" BackgroundColor="#229ac8" TextColor="#ffffff" Command="{Binding AddDishCommand}" />       
       </StackLayout>
     </StackLayout>
   </ScrollView>

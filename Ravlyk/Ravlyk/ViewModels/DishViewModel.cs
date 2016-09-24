@@ -20,7 +20,7 @@ namespace Ravlyk.ViewModels
         public int CategoryId { get; set; }
         public int ShopId { get; set; }
         public ICommand AddDishCommand { set; get; }
-        public ICommand AddToFavorCommand { set; get; }
+        public ICommand FavorCommand { set; get; }
         public ICommand GetFavorCommand { set; get; }
         public ICommand ClickBasketCommand { set; get; }
 
@@ -39,6 +39,7 @@ namespace Ravlyk.ViewModels
             }
         }
 
+        public string _basket;
         public string Basket
         {
             get
@@ -54,6 +55,43 @@ namespace Ravlyk.ViewModels
                 NotifyOfPropertyChange(() => Basket);
             }
         }
+
+        public string _basketTitle;
+        public string BasketTitle
+        {
+            get
+            {
+                var orders = IoC.Get<OrderService>().GetOrders();
+                foreach(var item in orders)
+                {
+                    if (item.Dish.Id == DishId)
+                        return "Додано";
+                }
+                return "В кошик";
+            }
+            set
+            {
+                _basketTitle = value;
+                NotifyOfPropertyChange(() => BasketTitle);
+            }
+        }
+
+        private string _favourite;
+        public string Favourite
+        {
+            get
+            {
+                if (_database.IsFavor(DishId))
+                    return "Вилучити з улюблених";
+                else
+                    return "Додати до улюблених";
+            }
+            set
+            {
+                _favourite = value;
+                NotifyOfPropertyChange(() => Favourite);
+            }
+        }
         private DatabaseService _database;
 
         private readonly WebService _webService;
@@ -65,13 +103,13 @@ namespace Ravlyk.ViewModels
             _navigationService = navigationService;
             _database = new DatabaseService();
             AddDishCommand = new Command(AddDish);
-            AddToFavorCommand = new Command(AddToFavor);
+            FavorCommand = new Command(Favor);
             GetFavorCommand = new Command(GetFavor);
             ClickBasketCommand = new Command(ClickBasket);
 
         }
 
-        public string _basket;
+       
 
         protected void AddDish()
         {
@@ -80,17 +118,27 @@ namespace Ravlyk.ViewModels
                 Basket = "basket.png";
             else
                 Basket = "plus.png";
+            BasketTitle = "Додано";
+
+           
         }
 
-        protected void AddToFavor()
+        protected void Favor()
         {
             _database.SetFavor(DishId);
+            if (_database.IsFavor(DishId))
+                Favourite = "Вилучити з улюблених";
+            else
+                Favourite = "Додати до улюблених";
         }
 
         protected void GetFavor()
         {
-            _database.GetFavor();
-            _navigationService.For<OrderViewModel>().WithParam(x => x.TotalPrice, IoC.Get<OrderService>().GetTotalPrice()).Navigate();
+            if (_database.GetFavor().Count != 0)
+            {
+                _navigationService.For<FavouriteViewModel>().Navigate();
+            }
+          
         }
 
         protected void ClickBasket()

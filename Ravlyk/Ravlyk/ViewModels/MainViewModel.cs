@@ -1,20 +1,14 @@
-﻿using Acr.UserDialogs;
-using Android.App;
-using Android.Views;
-using Android.Widget;
-using Caliburn.Micro;
+﻿using Caliburn.Micro;
 using Caliburn.Micro.Xamarin.Forms;
 using Plugin.Connectivity;
 using Ravlyk.Entities;
 using Ravlyk.Models;
 using Ravlyk.Services;
-using Ravlyk.Views;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
+using Acr.UserDialogs;
 
 namespace Ravlyk.ViewModels
 {
@@ -23,6 +17,8 @@ namespace Ravlyk.ViewModels
         public bool IsConnected { get; }
         public ICommand ClickBasketCommand { set; get; }
         public ICommand ClickInfoCommand { set; get; }
+        public ICommand RefreshCommand { set; get; }
+        public ICommand GetFavorCommand { set; get; }
         public DatabaseService _database;
         private List<ShopModel> _shops;
         public List<ShopModel> Shops
@@ -47,7 +43,7 @@ namespace Ravlyk.ViewModels
             {
                 if (value == null)
                     return;
-                    IoC.Get<INavigationService>().For<ShopViewModel>().WithParam(x => x.ShopId, value.Id).Navigate();
+                IoC.Get<INavigationService>().For<ShopViewModel>().WithParam(x => x.ShopId, value.Id).Navigate();
             }
         }
 
@@ -68,14 +64,33 @@ namespace Ravlyk.ViewModels
             }
         }
 
-        private string _internet;
-        public string Internet
+        private bool _isLoading;
+        public bool IsLoading
         {
-            get { return _internet; }
-            set
+            get { return _isLoading; }
+
+            private set
             {
-                _internet = value;
-                NotifyOfPropertyChange(() => Internet);
+                if (_isLoading != value)
+                {
+                    _isLoading = value;
+                    NotifyOfPropertyChange(() => IsLoading);
+                }
+            }
+        }
+
+        private bool _isRefreshing;
+        public bool IsRefreshing
+        {
+            get { return _isRefreshing; }
+
+            private set
+            {
+                if (_isRefreshing != value)
+                {
+                    _isRefreshing = value;
+                    NotifyOfPropertyChange(() => IsRefreshing);
+                }
             }
         }
 
@@ -83,9 +98,11 @@ namespace Ravlyk.ViewModels
         {
             _database = new DatabaseService();
             Shops = new List<ShopModel>();
+            GetFavorCommand = new Command(GetFavor);
             ClickBasketCommand = new Command(ClickBasket);
             ClickInfoCommand = new Command(ClickInfo);
-           
+            RefreshCommand = new Command(Refreshing);
+
         }
 
         protected void ClickBasket()
@@ -93,19 +110,41 @@ namespace Ravlyk.ViewModels
             IoC.Get<INavigationService>().For<OrderViewModel>().WithParam(x => x.TotalPrice, IoC.Get<OrderService>().GetTotalPrice()).Navigate();
         }
 
+        protected void GetFavor()
+        {
+            if (_database.GetFavor().Count != 0)
+            {
+                IoC.Get<INavigationService>().For<FavouriteViewModel>().Navigate();
+            }
+
+        }
+
         protected void ClickInfo()
         {
             IoC.Get<INavigationService>().For<InfoViewModel>().Navigate();
         }
 
-      
+        protected void Refreshing()
+        {
+            _database.Database.DropTable<ShopEntity>();
+            _database.Database.DropTable<CategoryEntity>();
+            _database.Database.DropTable<DishEntity>();
+            IsRefreshing = true;
+            _database.Database.CreateTable<ShopEntity>();
+            _database.Database.CreateTable<CategoryEntity>();
+            _database.Database.CreateTable<DishEntity>();
+            LoadShopsAsync();
 
-        protected override void OnActivate()
+        }
+
+
+        protected override async void OnActivate()
         {
             base.OnActivate();
+
             if (CrossConnectivity.Current.IsConnected)
             {
-             
+
                 try
                 {
                     _database.GetShops();
@@ -113,27 +152,27 @@ namespace Ravlyk.ViewModels
                 }
                 catch
                 {
+                    IsLoading = true;
                     _database.Database.CreateTable<ShopEntity>();
                     _database.Database.CreateTable<CategoryEntity>();
                     _database.Database.CreateTable<DishEntity>();
                     LoadShopsAsync();
-                  
                 }
-
-
             }
             else
             {
                 if (_database.GetShops().Count == 0)
                 {
-                    Internet = "Відсутнє з'єднання з інтернетом!";
+                    UserDialogs.Instance.Alert("Відсутнє з'єднання з інтернетом!");
                 }
+
                 else
                 {
                     Shops = _database.GetShopsFromBD();
                 }
             }
         }
+
 
         public async Task LoadShopsAsync()
         {
@@ -155,12 +194,13 @@ namespace Ravlyk.ViewModels
             _database.InsertShop(await IoC.Get<WebService>().LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=155_157", 13));
             _database.InsertShop(await IoC.Get<WebService>().LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=163_169", 14));
             _database.InsertShop(await IoC.Get<WebService>().LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=161_162", 15));
-           
+
             Shops = _database.GetShopsFromBD();
-           
+            IsLoading = false;
+            IsRefreshing = false;
         }
 
-      
+
     }
 }
 

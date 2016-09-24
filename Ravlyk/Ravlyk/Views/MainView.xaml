@@ -1,34 +1,44 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Ravlyk.Views.MainView" BackgroundColor="White" Title="Равлик">
+             x:Class="Ravlyk.Views.MainView" BackgroundColor="White" Title="Ravlyk Club">
 
   <ContentPage.ToolbarItems >
     <ToolbarItem Icon="info.png" Command="{Binding ClickInfoCommand}"/>
-    <ToolbarItem Icon="Favourite.png"/>
+    <ToolbarItem Icon="Favourite.png" Command="{Binding GetFavorCommand}"/>
     <ToolbarItem Icon="basket.png" Command="{Binding ClickBasketCommand}"/>
   </ContentPage.ToolbarItems>
 
-  <Label Text="Binding Internet" FontSize="Medium" VerticalOptions="Center" HorizontalOptions="Center"/> 
-  <ListView ItemsSource="{Binding Shops}" HorizontalOptions="CenterAndExpand"
-            SelectedItem="{Binding SelectedShop}" HasUnevenRows="True">
-    <ListView.ItemTemplate>
-      <DataTemplate>
-        <ViewCell>
-          <ViewCell.View>
-            <StackLayout Orientation="Horizontal" BackgroundColor="White" Padding="0,5">
-              <Image Source="{Binding ImagePath}" WidthRequest="200" HeightRequest="200" />
-              <StackLayout >
-                <Label Text="{Binding Title}" TextColor="#444" FontSize="Large" FontFamily="Open Sans"/>
-                <Label Text="{Binding Address}" TextColor="#666" FontSize="Small" FontFamily="Open Sans"/>
 
-                <Label Text="{Binding Type}" TextColor="#666" FontSize="Small" FontFamily="Open Sans"/>
-                <Label Text="{Binding Description}" TextColor="#666" FontSize="Small" FontFamily="Open Sans"/>
+  <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+    <ListView ItemsSource="{Binding Shops}" HorizontalOptions="CenterAndExpand"
+             SelectedItem="{Binding SelectedShop}" HasUnevenRows="True" IsRefreshing="{Binding IsRefreshing}"
+              IsPullToRefreshEnabled="True" RefreshCommand="{Binding RefreshCommand}">
+      <ListView.ItemTemplate>
+        <DataTemplate>
+          <ViewCell>
+            <ViewCell.View>
+              <StackLayout Orientation="Horizontal" BackgroundColor="White" Padding="0,5">
+                <Image Source="{Binding ImagePath}" WidthRequest="200" HeightRequest="200" />
+                <StackLayout >
+                  <Label Text="{Binding Title}" TextColor="#444" FontSize="Large" FontFamily="Open Sans"/>
+                  <Label Text="{Binding Address}" TextColor="#666" FontSize="Small" FontFamily="Open Sans"/>
+
+                  <Label Text="{Binding Type}" TextColor="#666" FontSize="Small" FontFamily="Open Sans"/>
+                  <Label Text="{Binding Description}" TextColor="#666" FontSize="Small" FontFamily="Open Sans"/>
+                </StackLayout>
               </StackLayout>
-            </StackLayout>
-          </ViewCell.View>
-        </ViewCell>
-      </DataTemplate>
-    </ListView.ItemTemplate>
-  </ListView>
+            </ViewCell.View>
+          </ViewCell>
+        </DataTemplate>
+      </ListView.ItemTemplate>
+    </ListView>
+    <StackLayout  VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Padding="0,0,0,100">     
+      <ActivityIndicator IsVisible="{Binding IsLoading}" IsRunning="{Binding IsLoading}"/>
+      <Label Text="Завантаження" IsVisible="{Binding IsLoading}" />
+    </StackLayout>
+  
+  </Grid>
+  
+  
 </ContentPage>

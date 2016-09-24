@@ -1,4 +1,6 @@
-﻿using Ravlyk.Models;
+﻿using Caliburn.Micro;
+using Ravlyk.Models;
+using Ravlyk.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -36,12 +38,13 @@ namespace Ravlyk.Services
         {
             bool isContains = false;       
             foreach (var item in _orders)
-                if (item.Dish == dish)
+                if (item.Dish.Title == dish.Title)
                 {
                     item.Count++;
                     string text = Regex.Replace(item.Dish.Price, "[^0-9]", "", RegexOptions.Singleline);
                     _totalPrice += int.Parse(text);
                     isContains = true;
+                   
                     break;
                 }
 
@@ -87,12 +90,20 @@ namespace Ravlyk.Services
 
         public void DeleteOrder(OrderModel order)
         {
+
+            foreach (var item in _orders)
+                if (item.Dish == order.Dish)
+                {
+                    string text = Regex.Replace(item.Dish.Price, "[^0-9]", "", RegexOptions.Singleline);
+                    _totalPrice -= int.Parse(text) * item.Count;
+                    break;
+                }
             _orders.Remove(order);
             if (_orders.Count == 0)
             {
                 _totalPrice = 0;
-
             }
+
         }
      
         public int GetTotalPrice()

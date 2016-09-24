@@ -12,6 +12,7 @@ namespace Ravlyk.ViewModels
     {
         public int ShopId { get; set; }
         public ICommand ClickBasketCommand { set; get; }
+        public ICommand GetFavorCommand { set; get; }
         public DatabaseService _database;
 
         private ShopModel _shop;
@@ -37,6 +38,7 @@ namespace Ravlyk.ViewModels
             _webservice = webservice;
             _navigationService = navigationService;
             _database = new DatabaseService();
+            GetFavorCommand = new Command(GetFavor);
             ClickBasketCommand = new Command(ClickBasket);
         }
 
@@ -74,6 +76,14 @@ namespace Ravlyk.ViewModels
             }
         }
 
+        protected void GetFavor()
+        {
+            if (_database.GetFavor().Count != 0)
+            {
+                _navigationService.For<FavouriteViewModel>().Navigate();
+            }
+
+        }
         protected void ClickBasket()
         {
             _navigationService.For<OrderViewModel>().WithParam(x => x.TotalPrice, IoC.Get<OrderService>().GetTotalPrice()).Navigate();
@@ -84,6 +94,7 @@ namespace Ravlyk.ViewModels
             base.OnActivate();
             Shop = new ShopModel()
             {
+                Title = _database.GetTitle(ShopId, 0),
                 Categories = _database.GetCategoriesFromBD(ShopId)
             };                         
         }

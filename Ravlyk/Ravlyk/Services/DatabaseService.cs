@@ -63,9 +63,9 @@ namespace Ravlyk.Services
             for (var j = GetCategories().Count + 1; j <= n; j++)
             {
                 InsertCategory(shop.Id, j);
-               
+
             }
-               
+
         }
 
         public void InsertCategory(int shopId, int id)
@@ -121,6 +121,26 @@ namespace Ravlyk.Services
             return (from i in Database.Table<DishEntity>() select i).ToList();
         }
 
+        public string GetTitle(int shopId, int categoryId)
+        {
+            if (categoryId == 0)
+            {
+                var db = IoC.Get<DatabaseService>().GetShops();
+                foreach (var item in db)
+                    if (item.Id == shopId)
+                        return item.Title;
+            }
+            else
+            {
+                var db = IoC.Get<DatabaseService>().GetCategories();
+                foreach (var item in db)
+                    if (item.Id_Category == categoryId)
+                        return item.Title;
+            }
+            return null;
+
+        }
+
         public List<ShopModel> GetShopsFromBD()
         {
             var db = IoC.Get<DatabaseService>().GetShops();
@@ -144,7 +164,7 @@ namespace Ravlyk.Services
             List<CategoryModel> categories = new List<CategoryModel>();
             foreach (var item in db)
             {
-                if(shopId == item.Id_Shop)
+                if (shopId == item.Id_Shop)
                 {
                     categories.Add(new CategoryModel()
                     {
@@ -154,18 +174,18 @@ namespace Ravlyk.Services
 
                     });
                 }
-               
+
             }
             return categories;
         }
 
-        public List<DishModel> GetDishesFromBD(int shopId,int categoryId)
+        public List<DishModel> GetDishesFromBD(int shopId, int categoryId)
         {
             var db = IoC.Get<DatabaseService>().GetDishes();
             List<DishModel> dishes = new List<DishModel>();
             foreach (var item in db)
             {
-                if(categoryId == item.Id_Category && shopId == item.Id_Shop)
+                if (categoryId == item.Id_Category && shopId == item.Id_Shop)
                 {
                     dishes.Add(new DishModel()
                     {
@@ -175,7 +195,7 @@ namespace Ravlyk.Services
                         Price = item.Price,
                         Description = item.Description
                     });
-                }              
+                }
             }
             return dishes;
         }
@@ -205,18 +225,40 @@ namespace Ravlyk.Services
             foreach (var item in db)
                 if (item.Id_Dish == dishId)
                 {
-                    item.Favourite = true;
-                    Database.Update(item);
-                }                
+                    if (item.Favourite)
+                    {
+                        item.Favourite = false;
+                        Database.Update(item);
+                    }
+                    else
+                    {
+                        item.Favourite = true;
+                        Database.Update(item);
+                    }
+
+                }
         }
 
-        public void GetFavor()
+        public bool IsFavor(int dishId)
         {
+
             var db = IoC.Get<DatabaseService>().GetDishes();
-            DishModel dish = new DishModel();
+            foreach (var item in db)
+                if (item.Id_Dish == dishId)
+                {
+                    return item.Favourite;
+                }
+            return false;
+        }
+
+
+        public ObservableCollection<DishModel> GetFavor()
+        {
+            ObservableCollection<DishModel> favor = new ObservableCollection<DishModel>();
+            var db = IoC.Get<DatabaseService>().GetDishes();
             foreach (var item in db)
                 if (item.Favourite)
-                    IoC.Get<OrderService>().AddDish(new DishModel()
+                    favor.Add(new DishModel()
                     {
                         Id = item.Id_Dish,
                         ImagePath = item.ImagePath,
@@ -224,7 +266,10 @@ namespace Ravlyk.Services
                         Price = item.Price,
                         Description = item.Description
                     });
+            return favor;
         }
+
+      
 
     }
 }

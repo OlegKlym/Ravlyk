@@ -12,8 +12,7 @@ namespace Ravlyk.ViewModels
         public int CategoryId { get; set ; }
         public int ShopId { get; set; }
         public ICommand ClickBasketCommand { set; get; }
-        private DatabaseService _database;
-        private CategoryModel _category;
+        public ICommand GetFavorCommand { set; get; }
         public CategoryModel Category
         {
             get
@@ -27,18 +26,6 @@ namespace Ravlyk.ViewModels
                 NotifyOfPropertyChange(() => Category);
             }
         }
-
-        private readonly WebService _webService;
-        private readonly INavigationService _navigationService;
-
-        public CategoryViewModel(WebService webService, INavigationService navigationService)
-        {
-            _webService = webService;
-            _navigationService = navigationService;
-            _database = new DatabaseService();
-            ClickBasketCommand = new Command(ClickBasket);
-        }
-
         private DishModel _selectedDish;
         public DishModel SelectedDish
         {
@@ -57,12 +44,14 @@ namespace Ravlyk.ViewModels
             }
         }
 
+
+
         public string _basket;
         public string Basket
         {
             get
             {
-                if( IoC.Get<OrderService>().GetOrders().Count == 0)
+                if (IoC.Get<OrderService>().GetOrders().Count == 0)
                     return "basket.png";
                 else
                     return "plus.png";
@@ -72,6 +61,30 @@ namespace Ravlyk.ViewModels
                 _basket = value;
                 NotifyOfPropertyChange(() => Basket);
             }
+        }
+        private DatabaseService _database;
+        private CategoryModel _category;
+        private readonly WebService _webService;
+        private readonly INavigationService _navigationService;
+
+        public CategoryViewModel(WebService webService, INavigationService navigationService)
+        {
+
+            _webService = webService;
+            _navigationService = navigationService;
+            _database = new DatabaseService();
+            GetFavorCommand = new Command(GetFavor);
+            ClickBasketCommand = new Command(ClickBasket);
+        }
+
+
+        protected void GetFavor()
+        {
+            if (_database.GetFavor().Count != 0)
+            {
+                _navigationService.For<FavouriteViewModel>().Navigate();
+            }
+
         }
 
         protected void ClickBasket()
@@ -84,6 +97,7 @@ namespace Ravlyk.ViewModels
            base.OnActivate();
             Category = new CategoryModel()
             {
+               Title = _database.GetTitle(ShopId,CategoryId),
                 Dishes = _database.GetDishesFromBD(ShopId,CategoryId)
             };
 

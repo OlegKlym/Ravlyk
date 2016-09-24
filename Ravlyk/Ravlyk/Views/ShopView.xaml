@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Ravlyk.Views.ShopView" BackgroundColor="White" Title="{Binding Title}">
+             x:Class="Ravlyk.Views.ShopView" BackgroundColor="White" Title="{Binding Shop.Title}">
   <ContentPage.ToolbarItems>
-    <ToolbarItem Icon="Favourite.png"/>
+    <ToolbarItem Icon="Favourite.png" Command="{Binding GetFavorCommand}"/>
     <ToolbarItem Icon="basket.png" Command="{Binding ClickBasketCommand}"/>
   </ContentPage.ToolbarItems>
 

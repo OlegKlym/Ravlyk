@@ -77,8 +77,8 @@ namespace Ravlyk.ViewModels
         {
 
             Text = "Дана функція поки  в розробці";
-            //if(IoC.Get<OrderService>().GetTotalPrice() > 69)
-            //     _navigationService.For<FormViewModel>().Navigate(); 
+            if (IoC.Get<OrderService>().GetTotalPrice() > 69)
+                _navigationService.For<FormViewModel>().Navigate();
         }
       
         protected override void OnActivate()

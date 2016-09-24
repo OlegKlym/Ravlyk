@@ -69,7 +69,10 @@ namespace Ravlyk.Models
                 IoC.Get<INavigationService>().GoBackToRootAsync();
                
             }
+            IoC.Get<IEventAggregator>().PublishOnUIThread(new ProductUpdate());
         }
+
+
 
     }
 }

@@ -27,11 +27,14 @@ namespace Ravlyk
                 .PerRequest<OrderViewModel>()
                 .PerRequest<FormViewModel>()
                 .PerRequest<InfoViewModel>()
+                .PerRequest<FavouriteViewModel>()
                 .PerRequest<ISQLiteService>()
                 .Singleton<IEventAggregator, EventAggregator>()
                 .Singleton<OrderService>()
                 .Singleton<WebService>()
+                .Singleton<Settings>()
                 .Singleton<DatabaseService>();
+                
 
 
             Initialize();
