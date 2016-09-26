@@ -43,7 +43,10 @@ namespace Ravlyk.ViewModels
             {
                 if (value == null)
                     return;
-                IoC.Get<INavigationService>().For<ShopViewModel>().WithParam(x => x.ShopId, value.Id).Navigate();
+                if(_database.GetCategoriesFromBD(value.Id).Count == 1)
+                    IoC.Get<INavigationService>().For<CategoryViewModel>().WithParam(x => x.CategoryId, _database.GetCategoriesFromBD(value.Id)[0].Id ).WithParam(x => x.ShopId, value.Id).Navigate();
+                else
+                    IoC.Get<INavigationService>().For<ShopViewModel>().WithParam(x => x.ShopId, value.Id).Navigate();
             }
         }
 
@@ -89,6 +92,7 @@ namespace Ravlyk.ViewModels
                 if (_isRefreshing != value)
                 {
                     _isRefreshing = value;
+                    
                     NotifyOfPropertyChange(() => IsRefreshing);
                 }
             }
@@ -107,7 +111,8 @@ namespace Ravlyk.ViewModels
 
         protected void ClickBasket()
         {
-            IoC.Get<INavigationService>().For<OrderViewModel>().WithParam(x => x.TotalPrice, IoC.Get<OrderService>().GetTotalPrice()).Navigate();
+            if (IoC.Get<OrderService>().GetOrders().Count != 0)
+                IoC.Get<INavigationService>().For<OrderViewModel>().WithParam(x => x.TotalPrice, IoC.Get<OrderService>().GetTotalPrice()).Navigate();
         }
 
         protected void GetFavor()

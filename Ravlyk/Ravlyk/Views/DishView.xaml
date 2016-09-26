@@ -24,8 +24,8 @@
         </StackLayout>
       </StackLayout>
 
-      <StackLayout Spacing="20" Padding="5,0">
-        <Label Text="{Binding Dish.Description}" FontSize="Medium" TextColor="#666" HorizontalOptions="CenterAndExpand"/>
+      <StackLayout Spacing="20" Padding="5,20">
+        <Label Text="{Binding Dish.Description}" FontSize="Medium" TextColor="#666" HorizontalOptions="Center"/>
 
       </StackLayout>
       <StackLayout Orientation="Horizontal"  HorizontalOptions="CenterAndExpand" VerticalOptions="End" Margin="0,25,0,0">

@@ -75,10 +75,10 @@ namespace Ravlyk.ViewModels
 
         public void Confirm()
         {
-
-            Text = "Дана функція поки  в розробці";
             if (IoC.Get<OrderService>().GetTotalPrice() > 69)
                 _navigationService.For<FormViewModel>().Navigate();
+            else
+                Text = "Мінімальна сума замовлення 69грн";
         }
       
         protected override void OnActivate()

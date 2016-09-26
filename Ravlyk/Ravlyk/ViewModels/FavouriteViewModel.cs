@@ -49,6 +49,11 @@ namespace Ravlyk.ViewModels
         public void RemoveFavor(DishModel dishObject)
         {
             Favors.Remove(dishObject);
+            _database.SetFavor(dishObject.Id);
+            if (_database.GetFavor().Count == 0)
+            {
+                IoC.Get<INavigationService>().GoBackToRootAsync();
+            }
         }
 
         protected override void OnActivate()

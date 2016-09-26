@@ -143,7 +143,8 @@ namespace Ravlyk.ViewModels
 
         protected void ClickBasket()
         {
-            _navigationService.For<OrderViewModel>().WithParam(x => x.TotalPrice, IoC.Get<OrderService>().GetTotalPrice()).Navigate();
+            if (IoC.Get<OrderService>().GetOrders().Count != 0)
+                IoC.Get<INavigationService>().For<OrderViewModel>().WithParam(x => x.TotalPrice, IoC.Get<OrderService>().GetTotalPrice()).Navigate();
         }
 
 

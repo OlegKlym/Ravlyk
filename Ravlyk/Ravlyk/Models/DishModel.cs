@@ -17,7 +17,6 @@ namespace Ravlyk.Models
         public bool Favourite { get; set; }
 
         public ICommand AddDishCommand { set; get; }
-        public ICommand DeleteDishCommand { set; get; }
         public string _basket;
         public string Basket
         {
@@ -57,7 +56,6 @@ namespace Ravlyk.Models
         {
             _database = new DatabaseService();
             AddDishCommand = new Command(AddDish);
-            DeleteDishCommand = new Command(DeleteDish);
         }
 
         protected void AddDish(object dishObject)
@@ -72,16 +70,6 @@ namespace Ravlyk.Models
 
         }
 
-        protected void DeleteDish(object dishObject)
-        {
-            DishModel dishItem = dishObject as DishModel;
-            _database.SetFavor(dishItem.Id);
-            IoC.Get<FavouriteViewModel>().RemoveFavor(dishItem);
-            if (_database.GetFavor().Count == 0)
-            {
-                IoC.Get<INavigationService>().GoBackToRootAsync();
-            }
-           
-        }
+       
     }
 }

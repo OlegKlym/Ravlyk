@@ -19,7 +19,8 @@
         </TableRoot>
       </TableView.Root>
     </TableView>
-    <Button Text="Підтвердити замовлення" BackgroundColor="#229ac8" TextColor="#fff" />
+     <Label Text="{Binding Text}" FontSize="Small" VerticalOptions="End" HorizontalOptions="Center"/>
+    <Button Text="Підтвердити замовлення" BackgroundColor="#229ac8" TextColor="#fff"  Command="{Binding ConfirmCommand}"/>
   </StackLayout>
 
 </ContentPage>
