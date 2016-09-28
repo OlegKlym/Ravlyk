@@ -49,21 +49,32 @@ namespace Ravlyk.ViewModels
             }
         }
 
-        private readonly WebService _dataService;
+   
+
+        public Command <OrderModel>StepperDecCommand { set; get; }
+        public Command <OrderModel>StepperIncCommand { set; get; }
+        public Command <OrderModel>DeleteOrderCommand { set; get; }
+
+
+        private readonly DatabaseService _databaseService;
         private readonly INavigationService _navigationService;
         private readonly IEventAggregator _eventAggregator;
 
         public OrderViewModel()
         {
-           
+            
         }
-        public OrderViewModel(WebService dataService, INavigationService navigationService, IEventAggregator eventAggregator)
+
+        public OrderViewModel(DatabaseService databaseService, INavigationService navigationService, IEventAggregator eventAggregator)
         {
-            _dataService = dataService;
+            _databaseService = databaseService;
             _navigationService = navigationService;
             _eventAggregator = eventAggregator;
             ClearOrdersCommand = new Command(ClearOrders);
             ConfirmCommand = new Command(Confirm);
+            StepperDecCommand = new Command<OrderModel>(StepperDec);
+            StepperIncCommand = new Command<OrderModel>(StepperInc);
+            DeleteOrderCommand = new Command<OrderModel>(DeleteOrder);
             NavigationPage.SetHasBackButton(new MainView(), false);
         }
 
@@ -80,14 +91,45 @@ namespace Ravlyk.ViewModels
             else
                 Text = "Мінімальна сума замовлення 69грн";
         }
-      
+
+        public void StepperInc(OrderModel orderObject)
+        {
+            IoC.Get<OrderService>().StepperInc(orderObject);
+            IoC.Get<IEventAggregator>().PublishOnUIThread(new ProductUpdate());
+            TotalPrice = IoC.Get<OrderService>().GetTotalPrice();
+            IoC.Get<IEventAggregator>().PublishOnUIThread(new ProductUpdate());
+
+        }
+
+        public void StepperDec(OrderModel orderObject)
+        {
+            IoC.Get<OrderService>().StepperDec(orderObject);
+            IoC.Get<IEventAggregator>().PublishOnUIThread(new ProductUpdate());
+            TotalPrice = IoC.Get<OrderService>().GetTotalPrice();
+            IoC.Get<IEventAggregator>().PublishOnUIThread(new ProductUpdate());
+        }
+
+        public void DeleteOrder(OrderModel orderObject)
+        {
+            if (orderObject != null)
+            {
+                IoC.Get<OrderService>().DeleteOrder(orderObject);
+            }
+
+            if (IoC.Get<OrderService>().GetOrders().Count == 0)
+            {
+                IoC.Get<INavigationService>().GoBackToRootAsync();
+
+            }
+            IoC.Get<IEventAggregator>().PublishOnUIThread(new ProductUpdate());
+        }
+
         protected override void OnActivate()
         {
           
             base.OnActivate();
-
+            
             _eventAggregator.Subscribe(this);
-
             Orders = IoC.Get<OrderService>().GetOrders();
            
         }

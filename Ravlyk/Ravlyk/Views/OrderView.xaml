@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Ravlyk.Views.OrderView" BackgroundColor="White"
-             xmlns:local="clr-namespace:Ravlyk.Models;assembly=Ravlyk" Title="Кошик">
+             x:Class="Ravlyk.Views.OrderView" BackgroundColor="White"   x:Name="OrderPage"
+              Title="Кошик">
 
 
   <StackLayout>
@@ -22,15 +22,17 @@
                     <Label Text="{Binding Dish.Price}" FontSize="Medium"/>
 
                     <StackLayout Orientation="Horizontal"  HeightRequest="40" WidthRequest="50">
-                      <Button Text="-" Command="{Binding StepperDecCommand}"  CommandParameter="{Binding}" WidthRequest="50"/>
+                      <Button Text="-" Command="{Binding BindingContext.StepperDecCommand, Source={x:Reference OrderPage}}"
+                              CommandParameter="{Binding .}" WidthRequest="50"/>
                       <ContentView Padding="0,5">
                         <Label Text="{Binding Count}" FontSize="Medium" />
                       </ContentView>
-                      <Button Text="+" Command="{Binding StepperIncCommand}"  CommandParameter="{Binding}" WidthRequest="50"/>
+                      <Button Text="+" Command="{Binding BindingContext.StepperIncCommand, Source={x:Reference OrderPage}}"
+                              CommandParameter="{Binding .}" WidthRequest="50"/>
                     </StackLayout>
 
                     <Button Text="Видалити" BackgroundColor="#da4f49" TextColor="#ffffff" HorizontalOptions="Start" WidthRequest="150"
-                     Command="{Binding DeleteOrderCommand}"  CommandParameter="{Binding}" />
+                             Command="{Binding BindingContext.DeleteOrderCommand, Source={x:Reference OrderPage}}" CommandParameter="{Binding .}" />
                   </StackLayout>
 
                 </StackLayout>

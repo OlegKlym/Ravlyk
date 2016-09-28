@@ -10,6 +10,8 @@ using System.Net.Http;
 
 using Ravlyk.Models;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using Acr.UserDialogs;
 
 namespace Ravlyk.ViewModels
 {
@@ -108,35 +110,50 @@ namespace Ravlyk.ViewModels
 
         public void Confirm()
         {
-            //Text = "Дана функція поки  в розробці";
-            _customer.customer_group_id = 1;
-            _customer.address_1 = Adress;
-            _customer.firstname = UserName;
-            _customer.email = Email;
-            _customer.telephone = Phone;
-            _customer.city = "Дрогобич";
-            var uri = "http://ravlyk.club/index.php?route=checkout/cart/add ";
-            SaveTodoItemAsync(uri);
-        }
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.Add("Cookie", "PHPSESSID=" + Guid.NewGuid().ToString());
 
-        
-        public async Task SaveTodoItemAsync(string uri)
-        {
-            
-            using (var client = new HttpClient())
+            var orders = IoC.Get<OrderService>().GetOrders();
+            foreach (var order in orders)
             {
-                var json = JsonConvert.SerializeObject(new OrderModel()
+                var cartAdd = new FormUrlEncodedContent(new[]
                 {
-                    Count = 1
+                    new KeyValuePair<string, string>("product_id",order.Dish.Id.ToString()),
+                    new KeyValuePair<string, string>("quantity", order.Count.ToString())
                 });
-                var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-                HttpResponseMessage response = await client.PostAsync(uri, content);
-
-                var result = await response.Content.ReadAsStringAsync();
-
+                SaveTodoItem("http://ravlyk.club/index.php?route=checkout/cart/add", cartAdd, client);              
             }
 
+
+            var guestSave = new FormUrlEncodedContent(new[]
+                {
+                    new KeyValuePair<string, string>("customer_group_id","1"),
+                    new KeyValuePair<string, string>("address_1",Adress),
+                    new KeyValuePair<string, string>("firstname",UserName),
+                    new KeyValuePair<string, string>("email",Email),
+                    new KeyValuePair<string, string>("telephone",Phone),
+                    new KeyValuePair<string, string>("city","Дрогобич")
+                });
+            SaveTodoItem("http://ravlyk.club/index.php?route=checkout/guest/save", guestSave, client);
+
+
+            var payment = new FormUrlEncodedContent(new[]
+               {
+                    new KeyValuePair<string, string>("payment_method","cod"),
+                    new KeyValuePair<string, string>("comment", "")
+                });
+            SaveTodoItem("http://ravlyk.club/index.php?route=checkout/payment_method/save", payment, client);
+
+            UserDialogs.Instance.ShowSuccess("Ваше замовлення оформлено!");
+            IoC.Get<OrderService>().ClearOrders();
+            IoC.Get<INavigationService>().For<MainViewModel>().Navigate();
+        }
+
+
+        public void SaveTodoItem(string uri, FormUrlEncodedContent content, HttpClient client)
+        {
+            var result = client.PostAsync(uri, content).Result;
+            string resultContent = result.Content.ReadAsStringAsync().Result;
         }
 
     }

@@ -10,7 +10,7 @@ namespace Ravlyk.Entities
     [Table("Dishes")]
     public class DishEntity
     {
-        [PrimaryKey, AutoIncrement, Column("_id")]
+        [PrimaryKey, Column("_id")]
         public int Id_Dish { get; set; }
 
         public int Id_Category { get; set; }

@@ -4,6 +4,7 @@ using Ravlyk.Models;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Ravlyk.Services
@@ -93,7 +94,7 @@ namespace Ravlyk.Services
             {
                 _dishes.Add(new DishModel()
                 {
-                    Id = id,
+                    Id = int.Parse(Regex.Replace(item.ChildNodes[1].ChildNodes[0].Id, "[^0-9]", "", RegexOptions.Singleline)),
                     ImagePath = item.ChildNodes[1].ChildNodes[0].GetAttributeValue("src", ""),
                     Title = (item.ChildNodes[3].ChildNodes[1].ChildNodes[1].InnerText.Contains("&quot;")) ?
                         item.ChildNodes[3].ChildNodes[1].ChildNodes[1].InnerText.Replace("&quot;", "''") : item.ChildNodes[3].ChildNodes[1].ChildNodes[1].InnerText,

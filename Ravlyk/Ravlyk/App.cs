@@ -1,4 +1,4 @@
-﻿using Acr.UserDialogs;
+﻿
 using Caliburn.Micro;
 using Caliburn.Micro.Xamarin.Forms;
 using Ravlyk.Services;

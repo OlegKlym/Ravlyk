@@ -84,9 +84,8 @@ namespace Ravlyk.Services
         {
             for (var i = GetCategories().Count - shop.Categories.Count + 1; i <= GetCategories().Count; i++)
             {
-                var n = IoC.Get<WebService>().LoadCategoryModelById(shop.Id, i).Dishes.Count;
-                for (var j = 1; j <= n; j++)
-                    InsertDish(shop.Id, i, j);
+                foreach(var dish in IoC.Get<WebService>().LoadCategoryModelById(shop.Id, i).Dishes)
+                    InsertDish(shop.Id, i, dish.Id);
             }
         }
 
@@ -96,6 +95,7 @@ namespace Ravlyk.Services
 
             Database.Insert(new DishEntity()
             {
+                Id_Dish = dish.Id,
                 Id_Shop = shopId,
                 Id_Category = categoryId,
                 ImagePath = dish.ImagePath,

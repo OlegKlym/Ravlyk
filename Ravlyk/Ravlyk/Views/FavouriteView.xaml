@@ -22,8 +22,8 @@
                 <StackLayout Padding="0,10">
                   <Label Text="{Binding Title}" FontSize="Large" />
                   <Label Text="{Binding Price}" FontSize="Medium"/>
-                  <Button Text="{Binding BasketTitle}" BackgroundColor="#229ac8" TextColor="#ffffff" 
-                          Command="{Binding AddDishCommand}"  CommandParameter="{Binding}"/>
+                  <Button Text="{Binding BindingContext.BasketTitle, Source={x:Reference MyPage}}" BackgroundColor="#229ac8" TextColor="#ffffff" 
+                          Command="{Binding BindingContext.AddDishCommand, Source={x:Reference MyPage}}" CommandParameter="{Binding}"/>
                   <Button Text="Видалити" BackgroundColor="#da4f49" TextColor="#ffffff" HorizontalOptions="Start" WidthRequest="150" 
                           Command="{Binding BindingContext.RemoveFavorCommand, Source={x:Reference MyPage}}"  CommandParameter="{Binding .}"/>
                 </StackLayout>

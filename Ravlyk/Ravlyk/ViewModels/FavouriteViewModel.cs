@@ -26,7 +26,42 @@ namespace Ravlyk.ViewModels
                 NotifyOfPropertyChange(() => Favors);
             }
         }
+
+        public string _basket;
+        public string Basket
+        {
+            get
+            {
+                if (IoC.Get<OrderService>().GetOrders().Count == 0)
+                    return "basket.png";
+                else
+                    return "plus.png";
+            }
+            set
+            {
+                _basket = value;
+                NotifyOfPropertyChange(() => Basket);
+            }
+        }
+
+        public string _basketTitle;
+        public string BasketTitle
+        {
+            get
+            {
+                if (_basketTitle == null)
+                    return "До кошика";
+                return "Додано";
+            }
+            set
+            {
+                _basketTitle = value;
+                NotifyOfPropertyChange(() => BasketTitle);
+            }
+        }
+
         public ICommand ClickBasketCommand { set; get; }
+        public Command<DishModel> AddDishCommand { set; get; }
         public Command<DishModel> RemoveFavorCommand { set; get; }
         DatabaseService _database;
 
@@ -42,7 +77,17 @@ namespace Ravlyk.ViewModels
             _navigationService = navigationService;
             ClickBasketCommand = new Command(ClickBasket);
             RemoveFavorCommand = new Command<DishModel>(RemoveFavor);
+            AddDishCommand = new Command<DishModel>(AddDish);
+        }
 
+        protected void AddDish(DishModel dishObject)
+        {
+            IoC.Get<OrderService>().AddDish(dishObject);
+            if (IoC.Get<OrderService>().GetOrders().Count == 0)
+                Basket = "basket.png";
+            else
+                Basket = "plus.png";
+            BasketTitle = "Додано";
 
         }
 

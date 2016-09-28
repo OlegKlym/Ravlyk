@@ -41,6 +41,8 @@
     <Compile Include="Entities\ShopEntity.cs" />
     <Compile Include="Events\ProductUpdate.cs" />
     <Compile Include="Models\CustomerModel.cs" />
+    <Compile Include="Models\PaymentModel.cs" />
+    <Compile Include="Models\ProductModel.cs" />
     <Compile Include="Resource.ua.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

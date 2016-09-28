@@ -5,6 +5,7 @@ using Xamarin.Forms.Platform.Android;
 using Xamarin.Forms;
 using Caliburn.Micro;
 using Android.Content.Res;
+using Acr.UserDialogs;
 
 namespace Ravlyk.Droid
 {
@@ -14,10 +15,12 @@ namespace Ravlyk.Droid
         protected override void OnCreate(Bundle bundle)
         {
             FormsAppCompatActivity.ToolbarResource = Resource.Layout.toolbar;
-
+          
             base.OnCreate(bundle);
             Forms.Init(this, bundle);
+            UserDialogs.Init(this);
             LoadApplication(new App(IoC.Get<SimpleContainer>()));
+            
         }
     }
 }

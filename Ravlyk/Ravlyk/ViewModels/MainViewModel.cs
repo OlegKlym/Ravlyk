@@ -1,4 +1,5 @@
-﻿using Caliburn.Micro;
+﻿using Acr.UserDialogs;
+using Caliburn.Micro;
 using Caliburn.Micro.Xamarin.Forms;
 using Plugin.Connectivity;
 using Ravlyk.Entities;
@@ -8,7 +9,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
-using Acr.UserDialogs;
+
 
 namespace Ravlyk.ViewModels
 {
@@ -149,7 +150,7 @@ namespace Ravlyk.ViewModels
 
             if (CrossConnectivity.Current.IsConnected)
             {
-
+               
                 try
                 {
                     _database.GetShops();
