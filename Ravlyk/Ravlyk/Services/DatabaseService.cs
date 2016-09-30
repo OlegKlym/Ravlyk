@@ -1,14 +1,10 @@
 ﻿using Caliburn.Micro;
 using Ravlyk.Entities;
 using Ravlyk.Models;
-using Ravlyk.ViewModels;
 using SQLite;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Ravlyk.Services
@@ -36,13 +32,10 @@ namespace Ravlyk.Services
         {
             string databasePath = DependencyService.Get<ISQLiteService>().GetDatabasePath();
             Database = new SQLiteConnection(databasePath);
-            Database.CreateTable<ShopEntity>();
-
         }
 
         public void InsertShop(ShopModel shop)
         {
-
             Database.Insert(new ShopEntity()
             {
                 ImagePath = shop.ImagePath,
@@ -56,14 +49,12 @@ namespace Ravlyk.Services
 
         }
 
-
         public void LoadCategories(ShopModel shop)
         {
             var n = GetCategories().Count + shop.Categories.Count;
             for (var j = GetCategories().Count + 1; j <= n; j++)
             {
                 InsertCategory(shop.Id, j);
-
             }
 
         }
@@ -84,7 +75,7 @@ namespace Ravlyk.Services
         {
             for (var i = GetCategories().Count - shop.Categories.Count + 1; i <= GetCategories().Count; i++)
             {
-                foreach(var dish in IoC.Get<WebService>().LoadCategoryModelById(shop.Id, i).Dishes)
+                foreach (var dish in IoC.Get<WebService>().LoadCategoryModelById(shop.Id, i).Dishes)
                     InsertDish(shop.Id, i, dish.Id);
             }
         }
@@ -104,7 +95,6 @@ namespace Ravlyk.Services
                 Description = dish.Description
             });
         }
-
 
         public List<ShopEntity> GetShops()
         {
@@ -138,7 +128,6 @@ namespace Ravlyk.Services
                         return item.Title;
             }
             return null;
-
         }
 
         public List<ShopModel> GetShopsFromBD()
@@ -174,7 +163,6 @@ namespace Ravlyk.Services
 
                     });
                 }
-
             }
             return categories;
         }
@@ -235,13 +223,11 @@ namespace Ravlyk.Services
                         item.Favourite = true;
                         Database.Update(item);
                     }
-
                 }
         }
 
         public bool IsFavor(int dishId)
         {
-
             var db = IoC.Get<DatabaseService>().GetDishes();
             foreach (var item in db)
                 if (item.Id_Dish == dishId)
@@ -250,7 +236,6 @@ namespace Ravlyk.Services
                 }
             return false;
         }
-
 
         public ObservableCollection<DishModel> GetFavor()
         {
@@ -268,8 +253,6 @@ namespace Ravlyk.Services
                     });
             return favor;
         }
-
-      
 
     }
 }

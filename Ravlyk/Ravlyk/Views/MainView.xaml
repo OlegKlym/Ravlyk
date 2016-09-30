@@ -33,7 +33,7 @@
         </DataTemplate>
       </ListView.ItemTemplate>
     </ListView>
-    <StackLayout  VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Padding="0,0,0,100">     
+    <StackLayout  VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand">     
       <ActivityIndicator IsVisible="{Binding IsLoading}" IsRunning="{Binding IsLoading}"/>
       <Label Text="Завантаження" IsVisible="{Binding IsLoading}" />
     </StackLayout>

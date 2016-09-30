@@ -1,9 +1,5 @@
 ﻿using Caliburn.Micro;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -21,10 +17,7 @@ namespace Ravlyk.ViewModels
         public void PhoneCall(object orderObject)
         {
             string number = orderObject.ToString();
-
-            Device.OpenUri(new Uri("tel:" + number));
-
-
+            Device.OpenUri(new Uri("tel:" + number));           
         }
     }
 }

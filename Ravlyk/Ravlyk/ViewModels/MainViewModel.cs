@@ -15,12 +15,13 @@ namespace Ravlyk.ViewModels
 {
     public class MainViewModel : Screen
     {
-        public bool IsConnected { get; }
+        public bool IsConnected { get; }   
         public ICommand ClickBasketCommand { set; get; }
         public ICommand ClickInfoCommand { set; get; }
         public ICommand RefreshCommand { set; get; }
         public ICommand GetFavorCommand { set; get; }
         public DatabaseService _database;
+
         private List<ShopModel> _shops;
         public List<ShopModel> Shops
         {
@@ -107,7 +108,6 @@ namespace Ravlyk.ViewModels
             ClickBasketCommand = new Command(ClickBasket);
             ClickInfoCommand = new Command(ClickInfo);
             RefreshCommand = new Command(Refreshing);
-
         }
 
         protected void ClickBasket()
@@ -122,7 +122,6 @@ namespace Ravlyk.ViewModels
             {
                 IoC.Get<INavigationService>().For<FavouriteViewModel>().Navigate();
             }
-
         }
 
         protected void ClickInfo()
@@ -140,17 +139,13 @@ namespace Ravlyk.ViewModels
             _database.Database.CreateTable<CategoryEntity>();
             _database.Database.CreateTable<DishEntity>();
             LoadShopsAsync();
-
-        }
-
+       }
 
         protected override async void OnActivate()
         {
             base.OnActivate();
-
             if (CrossConnectivity.Current.IsConnected)
-            {
-               
+            {              
                 try
                 {
                     _database.GetShops();
@@ -179,7 +174,6 @@ namespace Ravlyk.ViewModels
             }
         }
 
-
         public async Task LoadShopsAsync()
         {
             _database.InsertShop(await IoC.Get<WebService>().LoadShopAsync("http://ravlyk.club/index.php?route=product/category&path=63_147", 1));
@@ -205,8 +199,6 @@ namespace Ravlyk.ViewModels
             IsLoading = false;
             IsRefreshing = false;
         }
-
-
     }
 }
 

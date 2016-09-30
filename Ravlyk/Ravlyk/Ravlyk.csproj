@@ -40,6 +40,7 @@
     <Compile Include="Entities\DishEntity.cs" />
     <Compile Include="Entities\ShopEntity.cs" />
     <Compile Include="Events\ProductUpdate.cs" />
+    <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Models\CustomerModel.cs" />
     <Compile Include="Models\PaymentModel.cs" />
     <Compile Include="Models\ProductModel.cs" />
@@ -61,7 +62,7 @@
     <Compile Include="ViewModels\CategoryViewModel.cs" />
     <Compile Include="ViewModels\DishViewModel.cs" />
     <Compile Include="ViewModels\FavouriteViewModel.cs" />
-    <Compile Include="ViewModels\FormViewModel.cs" />
+    <Compile Include="ViewModels\CheckoutViewModel.cs" />
     <Compile Include="ViewModels\InfoViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\OrderViewModel.cs" />
@@ -75,8 +76,8 @@
     <Compile Include="Views\FavouriteView.xaml.cs">
       <DependentUpon>FavouriteView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\FormView.xaml.cs">
-      <DependentUpon>FormView.xaml</DependentUpon>
+    <Compile Include="Views\CheckoutView.xaml.cs">
+      <DependentUpon>CheckoutView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\InfoView.xaml.cs">
       <DependentUpon>InfoView.xaml</DependentUpon>
@@ -209,7 +210,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Views\FormView.xaml">
+    <EmbeddedResource Include="Views\CheckoutView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>

@@ -1,13 +1,6 @@
-﻿using Caliburn.Micro;
-using Ravlyk.Models;
-using Ravlyk.ViewModels;
-using System;
-using System.Collections.Generic;
+﻿using Ravlyk.Models;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Ravlyk.Services
 {
@@ -15,19 +8,6 @@ namespace Ravlyk.Services
     {
         private ObservableCollection<OrderModel> _orders = new ObservableCollection<OrderModel>();
         private int _totalPrice;
-        private static OrderService _instance;
-        public static OrderService Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new OrderService();
-                }
-
-                return _instance;
-            }
-        }
 
         public ObservableCollection<OrderModel> GetOrders()
         {
@@ -90,7 +70,6 @@ namespace Ravlyk.Services
 
         public void DeleteOrder(OrderModel order)
         {
-
             foreach (var item in _orders)
                 if (item.Dish == order.Dish)
                 {

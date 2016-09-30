@@ -2,12 +2,7 @@
 using Caliburn.Micro.Xamarin.Forms;
 using Ravlyk.Models;
 using Ravlyk.Services;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -65,12 +60,8 @@ namespace Ravlyk.ViewModels
         public Command<DishModel> RemoveFavorCommand { set; get; }
         DatabaseService _database;
 
-
-
-
         private readonly INavigationService _navigationService;
-
-      
+     
         public FavouriteViewModel (INavigationService navigationService )
         {
             _database = new DatabaseService();
@@ -88,7 +79,6 @@ namespace Ravlyk.ViewModels
             else
                 Basket = "plus.png";
             BasketTitle = "Додано";
-
         }
 
         public void RemoveFavor(DishModel dishObject)
@@ -106,7 +96,6 @@ namespace Ravlyk.ViewModels
             base.OnActivate();
             Favors = _database.GetFavor();
         }
-
 
         protected void ClickBasket()
         {

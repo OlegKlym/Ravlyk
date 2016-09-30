@@ -1,5 +1,4 @@
-﻿using Caliburn.Micro;
-using HtmlAgilityPack;
+﻿using HtmlAgilityPack;
 using Ravlyk.Models;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,24 +32,20 @@ namespace Ravlyk.Services
                 WorkTime = (shopList.ChildNodes.Count == 7) ? shopList.ChildNodes[5].InnerText : shopList.ChildNodes[6].InnerText,
                 Type = (shopList.ChildNodes.Count == 7) ? "" : shopList.ChildNodes[7].InnerText,
                 Description = (shopList.ChildNodes.Count == 7) ? "" : shopList.ChildNodes[8].InnerText,
-                Categories = await GetCategories(root)
+                Categories = await GetCategoriesAsync(root)
 
             };
-
-            _shops.Add(shop);
-        
+            _shops.Add(shop);        
             return shop;
         }
 
         public ShopModel LoadShopModelById(int shopId)
-        {
-            
+        {            
             return _shops.FirstOrDefault(x => x.Id == shopId);
         }
           
-        private async static Task<List<CategoryModel>> GetCategories(HtmlNode root)
+        private async static Task<List<CategoryModel>> GetCategoriesAsync(HtmlNode root)
         {
-
             List<CategoryModel> _categories = new List<CategoryModel>() { };
             var divList = root.Descendants().Where(n => n.GetAttributeValue("id", "").Equals("column-left")).Single().ChildNodes[1].ChildNodes;
             bool flag = false;
@@ -69,7 +64,7 @@ namespace Ravlyk.Services
                             Id = categoryId,
                             ImagePath = item.ChildNodes[1].GetAttributeValue("src", ""),
                             Title = item.ChildNodes[3].InnerText,
-                            Dishes = await GetDishes(url)
+                            Dishes = await GetDishesAsync(url)
                         });
                         categoryId++;
                     }
@@ -84,7 +79,7 @@ namespace Ravlyk.Services
             return shop.Categories.FirstOrDefault(x => x.Id == categoryId);
         }
 
-        private static async Task<List<DishModel>> GetDishes(string url)
+        private static async Task<List<DishModel>> GetDishesAsync(string url)
         {
             var root = await LoadHtml(url);
             var divList = root.Descendants().Where(n => n.GetAttributeValue("class", "").Equals("product-thumb"));
@@ -109,14 +104,13 @@ namespace Ravlyk.Services
         public DishModel LoadDishModelById(int shopId, int categoryId, int dishId)
         {
             var category = LoadCategoryModelById(shopId, categoryId);
-            return category.Dishes.FirstOrDefault(x => x.Id == dishId);
-          
+            return category.Dishes.FirstOrDefault(x => x.Id == dishId);         
         }
+
         public List<ShopModel> GetShops()
         {
             return _shops;
         }
-
 
         private async static Task<HtmlNode> LoadHtml(string url)
         {

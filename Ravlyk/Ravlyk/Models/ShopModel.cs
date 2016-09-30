@@ -1,9 +1,8 @@
-﻿using SQLite;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Ravlyk.Models
 {
-    
+
     public class ShopModel
     {
         public int Id { get; set; }

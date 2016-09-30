@@ -1,6 +1,6 @@
-﻿
-using Caliburn.Micro;
+﻿using Caliburn.Micro;
 using Caliburn.Micro.Xamarin.Forms;
+using Ravlyk.Helpers;
 using Ravlyk.Services;
 using Ravlyk.ViewModels;
 using Ravlyk.Views;
@@ -25,9 +25,10 @@ namespace Ravlyk
                 .PerRequest<CategoryViewModel>()
                 .PerRequest<DishViewModel>()
                 .PerRequest<OrderViewModel>()
-                .PerRequest<FormViewModel>()
+                .PerRequest<CheckoutViewModel>()
                 .PerRequest<InfoViewModel>()
                 .PerRequest<FavouriteViewModel>()
+                .PerRequest<Helper>()
                 .PerRequest<ISQLiteService>()
                 .Singleton<IEventAggregator, EventAggregator>()
                 .Singleton<OrderService>()

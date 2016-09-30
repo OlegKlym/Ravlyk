@@ -12,12 +12,7 @@ using System;
 namespace Ravlyk.ViewModels
 {
     public class OrderViewModel : Screen, IHandle<ProductUpdate>
-    {
-        public ICommand ClearOrdersCommand { set; get; }
-        public ICommand ConfirmCommand { set; get; }
-
-
-      
+    {             
         private ObservableCollection<OrderModel> _orders;
         public ObservableCollection<OrderModel> Orders
         {
@@ -49,22 +44,16 @@ namespace Ravlyk.ViewModels
             }
         }
 
-   
-
+        public ICommand ClearOrdersCommand { set; get; }
+        public ICommand ConfirmCommand { set; get; }
         public Command <OrderModel>StepperDecCommand { set; get; }
         public Command <OrderModel>StepperIncCommand { set; get; }
         public Command <OrderModel>DeleteOrderCommand { set; get; }
 
-
         private readonly DatabaseService _databaseService;
         private readonly INavigationService _navigationService;
         private readonly IEventAggregator _eventAggregator;
-
-        public OrderViewModel()
-        {
-            
-        }
-
+        
         public OrderViewModel(DatabaseService databaseService, INavigationService navigationService, IEventAggregator eventAggregator)
         {
             _databaseService = databaseService;
@@ -87,7 +76,7 @@ namespace Ravlyk.ViewModels
         public void Confirm()
         {
             if (IoC.Get<OrderService>().GetTotalPrice() > 69)
-                _navigationService.For<FormViewModel>().Navigate();
+                _navigationService.For<CheckoutViewModel>().Navigate();
             else
                 Text = "Мінімальна сума замовлення 69грн";
         }
@@ -98,7 +87,6 @@ namespace Ravlyk.ViewModels
             IoC.Get<IEventAggregator>().PublishOnUIThread(new ProductUpdate());
             TotalPrice = IoC.Get<OrderService>().GetTotalPrice();
             IoC.Get<IEventAggregator>().PublishOnUIThread(new ProductUpdate());
-
         }
 
         public void StepperDec(OrderModel orderObject)
@@ -125,13 +113,10 @@ namespace Ravlyk.ViewModels
         }
 
         protected override void OnActivate()
-        {
-          
-            base.OnActivate();
-            
+        {         
+            base.OnActivate();           
             _eventAggregator.Subscribe(this);
-            Orders = IoC.Get<OrderService>().GetOrders();
-           
+            Orders = IoC.Get<OrderService>().GetOrders();          
         }
 
         public void Handle(ProductUpdate message)

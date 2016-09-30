@@ -2,13 +2,6 @@
 using Caliburn.Micro.Xamarin.Forms;
 using Ravlyk.Models;
 using Ravlyk.Services;
-using Ravlyk.Views;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -62,7 +55,7 @@ namespace Ravlyk.ViewModels
             get
             {
                 var orders = IoC.Get<OrderService>().GetOrders();
-                foreach(var item in orders)
+                foreach (var item in orders)
                 {
                     if (item.Dish.Id == DishId)
                         return "Додано";
@@ -92,8 +85,8 @@ namespace Ravlyk.ViewModels
                 NotifyOfPropertyChange(() => Favourite);
             }
         }
-        private DatabaseService _database;
 
+        private DatabaseService _database;
         private readonly WebService _webService;
         private readonly INavigationService _navigationService;
 
@@ -106,10 +99,7 @@ namespace Ravlyk.ViewModels
             FavorCommand = new Command(Favor);
             GetFavorCommand = new Command(GetFavor);
             ClickBasketCommand = new Command(ClickBasket);
-
         }
-
-       
 
         protected void AddDish()
         {
@@ -119,8 +109,6 @@ namespace Ravlyk.ViewModels
             else
                 Basket = "plus.png";
             BasketTitle = "Додано";
-
-           
         }
 
         protected void Favor()
@@ -138,7 +126,7 @@ namespace Ravlyk.ViewModels
             {
                 _navigationService.For<FavouriteViewModel>().Navigate();
             }
-          
+
         }
 
         protected void ClickBasket()
@@ -146,8 +134,6 @@ namespace Ravlyk.ViewModels
             if (IoC.Get<OrderService>().GetOrders().Count != 0)
                 IoC.Get<INavigationService>().For<OrderViewModel>().WithParam(x => x.TotalPrice, IoC.Get<OrderService>().GetTotalPrice()).Navigate();
         }
-
-
 
         protected override void OnActivate()
         {

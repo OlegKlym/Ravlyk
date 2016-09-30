@@ -8,9 +8,9 @@ using Xamarin.Forms;
 
 namespace Ravlyk.Views
 {
-	public partial class FormView : ContentPage
+	public partial class CheckoutView : ContentPage
 	{
-		public FormView ()
+		public CheckoutView()
 		{
 			InitializeComponent ();
 		}

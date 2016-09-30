@@ -1,13 +1,6 @@
-﻿using Caliburn.Micro;
-using Caliburn.Micro.Xamarin.Forms;
-using Ravlyk.Services;
-using Ravlyk.ViewModels;
-using System.Windows.Input;
-using Xamarin.Forms;
-
-namespace Ravlyk.Models
+﻿namespace Ravlyk.Models
 {
-    public class DishModel : PropertyChangedBase
+    public class DishModel 
     {
         public int Id { get; set; }
         public string Title { get; set; }

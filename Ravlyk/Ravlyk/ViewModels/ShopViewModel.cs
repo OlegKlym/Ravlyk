@@ -71,8 +71,7 @@ namespace Ravlyk.ViewModels
             {
                 if (value == null)
                     return;
-                _navigationService.For<CategoryViewModel>().WithParam(x => x.CategoryId, value.Id).WithParam(x => x.ShopId, ShopId).Navigate();
-
+                _navigationService.For<CategoryViewModel>().WithParam(x => x.CategoryId, value.Id).WithParam(x => x.ShopId, ShopId).Navigate();           
             }
         }
 
@@ -84,6 +83,7 @@ namespace Ravlyk.ViewModels
             }
 
         }
+
         protected void ClickBasket()
         {
             if (IoC.Get<OrderService>().GetOrders().Count != 0)
@@ -98,8 +98,6 @@ namespace Ravlyk.ViewModels
                 Title = _database.GetTitle(ShopId, 0),
                 Categories = _database.GetCategoriesFromBD(ShopId)
             };                         
-        }
-
-        
+        }        
     }
 }

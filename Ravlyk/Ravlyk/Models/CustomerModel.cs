@@ -9,7 +9,6 @@ namespace Ravlyk.Models
     public class CustomerModel
     {
         public int customer_group_id { get; set; }
-
         public string address_1 { get; set; }
         public string email { get; set; }
         public string firstname { get; set; }
