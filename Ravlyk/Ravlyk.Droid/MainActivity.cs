@@ -9,19 +9,34 @@ using Acr.UserDialogs;
 
 namespace Ravlyk.Droid
 {
-    [Activity(Label = "Ravlyk", Icon = "@drawable/ic_launcher", MainLauncher = false, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "Ravlyk", Icon = "@drawable/ic_launcher", MainLauncher = false, ScreenOrientation = ScreenOrientation.Portrait, NoHistory = true, 
+    ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : FormsAppCompatActivity
     {
         protected override void OnCreate(Bundle bundle)
         {
-            FormsAppCompatActivity.ToolbarResource = Resource.Layout.toolbar;
-          
+            ToolbarResource = Resource.Layout.toolbar;        
             base.OnCreate(bundle);
+           
             Forms.Init(this, bundle);
             UserDialogs.Init(this);
             LoadApplication(new App(IoC.Get<SimpleContainer>()));
-            
+           
+        }
+
+        public override void OnBackPressed()
+        {
+           if(App.Current.MainPage.Navigation.NavigationStack.Count == 1)
+           {
+                Finish();
+                Process.KillProcess(Process.MyPid());
+            }   
+            else
+            {
+                App.Current.MainPage.Navigation.PopAsync();
+            }
         }
     }
 }
 
+    

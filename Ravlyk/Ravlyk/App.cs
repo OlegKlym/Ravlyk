@@ -12,7 +12,7 @@ namespace Ravlyk
 
     public class App : FormsApplication
     {
-       
+        public static bool AppStart = false; 
         private readonly SimpleContainer container;
 
         public App(SimpleContainer container)
@@ -35,11 +35,10 @@ namespace Ravlyk
                 .Singleton<WebService>()
                 .Singleton<Settings>()
                 .Singleton<DatabaseService>();
-                
 
 
+            AppStart = true;
             Initialize();
-           
             DisplayRootView<MainView>();
         }
 
@@ -47,5 +46,9 @@ namespace Ravlyk
         {
             container.Instance<INavigationService>(new NavigationPageAdapter(navigationPage));
         }
+
+
+       
+
     }
 }

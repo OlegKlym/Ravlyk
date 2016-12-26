@@ -104,7 +104,7 @@ namespace Ravlyk.ViewModels
 
         public async void ConfirmAsync()
         {
-            try 
+            try
             {
                 var client = new HttpClient();
                 client.DefaultRequestHeaders.Host = "ravlyk.club";
@@ -114,7 +114,6 @@ namespace Ravlyk.ViewModels
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("*/*"));
                 client.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
                 client.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("deflate"));
-                client.DefaultRequestHeaders.AcceptEncoding.Add(new StringWithQualityHeaderValue("sdch"));
                 client.DefaultRequestHeaders.AcceptLanguage.Add(new StringWithQualityHeaderValue("en-US"));
                 client.DefaultRequestHeaders.AcceptLanguage.Add(new StringWithQualityHeaderValue("en"));
                 client.DefaultRequestHeaders.Add("Origin", "http://ravlyk.club");
@@ -123,27 +122,23 @@ namespace Ravlyk.ViewModels
                 client.DefaultRequestHeaders.Add("Cookie", "PHPSESSID=" + Guid.NewGuid().ToString());
                 client.DefaultRequestHeaders.Add("Cookie", "language=en");
                 client.DefaultRequestHeaders.Add("Cookie", "currency=USD");
-                client.DefaultRequestHeaders.Add("Cookie", "_gat=1");
-                client.DefaultRequestHeaders.Add("Cookie", "_ga=GA1.2.1469697339.1472468099");
+               
 
                 var orders = IoC.Get<OrderService>().GetOrders();
                 foreach (var order in orders)
                 {
                     var cartAdd = new FormUrlEncodedContent(new[]
                     {
-                    new KeyValuePair<string, string>("product_id",order.Dish.Id.ToString()),
-                    new KeyValuePair<string, string>("quantity", order.Count.ToString())
-                });
-                    //SaveTodoItem(http://ravlyk.club/index.php?route=checkout/cart/add", cartAdd, client);
-                    var resultCart = await client.PostAsync("http://ravlyk.club/index.php?route=checkout/cart/add", cartAdd);
-                    if (resultCart.IsSuccessStatusCode)
-                    {
-                        var resultContent1 = await resultCart.Content.ReadAsStringAsync();
-                    }
+                        new KeyValuePair<string, string>("product_id",order.Dish.Id.ToString()),
+                        new KeyValuePair<string, string>("quantity", order.Count.ToString())    
+                    });
+                    await SaveTodoItemAsync("http://ravlyk.club/index.php?route=checkout/cart/add", cartAdd, client);                  
                 }
+
 
                 var response = await client.GetAsync("http://ravlyk.club/index.php?route=checkout/checkout/customfield&customer_group_id=1");
                 var resultContent = await response.Content.ReadAsStringAsync();
+
 
                 var guestSave = new FormUrlEncodedContent(new[]
                     {
@@ -154,15 +149,11 @@ namespace Ravlyk.ViewModels
                     new KeyValuePair<string, string>("telephone",Phone),
                     new KeyValuePair<string, string>("city","Дрогобич")
                 });
-                //SaveTodoItem("http://ravlyk.club/index.php?route=checkout/guest/save", guestSave, client);
-                var resultGuest = await client.PostAsync("http://ravlyk.club/index.php?route=checkout/cart/add", guestSave);
-                if (resultGuest.IsSuccessStatusCode)
-                {
-                    var resultContent2 = await resultGuest.Content.ReadAsStringAsync();
-                }
+                await SaveTodoItemAsync("http://ravlyk.club/index.php?route=checkout/guest/save", guestSave, client);
+               
 
                 var payment = new FormUrlEncodedContent(new[]
-              {
+                {
                     new KeyValuePair<string, string>("payment_method","cod"),
                     new KeyValuePair<string, string>("comment", "None")
                 });
@@ -173,20 +164,21 @@ namespace Ravlyk.ViewModels
                     var resultContent3 = await result.Content.ReadAsStringAsync();
                 }
 
+
                 var unixTime = IoC.Get<Helper>().GetGMTInMS();
                 response = await client.GetAsync("http://ravlyk.club/index.php?route=payment/cod/confirm&_=" + unixTime.ToString());
-                var time = response.Content.ReadAsStringAsync().Result;
+                var time = await response.Content.ReadAsStringAsync();
 
 
                 IoC.Get<OrderService>().ClearOrders();
                 UserDialogs.Instance.ShowSuccess("Ваше замовлення оформлено!");
-                IoC.Get<INavigationService>().GoBackToRootAsync();
+                await IoC.Get<INavigationService>().GoBackToRootAsync();
 
             }
-            catch 
+            catch
             {
                 UserDialogs.Instance.Alert("Відсутнє з'єднання з інтернетом!");
-            }            
+            }
         }
 
         public async Task SaveTodoItemAsync(string uri, FormUrlEncodedContent content, HttpClient client)

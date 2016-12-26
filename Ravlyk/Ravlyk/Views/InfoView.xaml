@@ -2,27 +2,31 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Ravlyk.Views.InfoView" Title="Умови доставки">
-  <StackLayout Padding="5">
-    <StackLayout Padding="10,10,0,0">
-      <Label Text="Доставка здійснюється по м. Дрогобич за умови замовлення на суму 69 грн." FontSize="Small"/>
-      <Label Text="Одне замовлення здійснюється з одного закладу та на одну адресу. В ціну що вказана на сайті входить вартість упакування та сервісу, окремо послуга доставки не оплачується" FontSize="Small"/>
+	<ScrollView>
+		<StackLayout Padding="5">
+			<StackLayout Padding="10,10,0,0">
+				<Label Text="Доставка здійснюється по м. Дрогобич за умови замовлення на суму 69 грн." FontSize="Small"/>
+				<Label Text="Одне замовлення здійснюється з одного закладу та на одну адресу. В ціну що вказана на сайті входить вартість упакування та сервісу, окремо послуга доставки не оплачується" FontSize="Small"/>
 
-      <Label Text="Замовлення приймає оператор з 12:00 до 22:00" FontSize="Small"/>
-      <Label Text="Час доставки 15- 60 хвилин. Страви готуються безпосередньо після Вашого замовлення" FontSize="Small"/>
+				<Label Text="Замовлення приймає оператор з 12:00 до 22:00" FontSize="Small"/>
+				<Label Text="Час доставки 15- 60 хвилин. Страви готуються безпосередньо після Вашого замовлення" FontSize="Small"/>
 
-      <Label Text="Алкогольні напої доставляються лише особам, що досягнули 21 року" FontSize="Small"/>
-      <Label Text="Увага! Деякі фотографії не відповідають вигляду подачі страви!" FontSize="Small"/>
-    </StackLayout>
-  
-    <StackLayout VerticalOptions="EndAndExpand">
-      <Label Text="Номери телефонів для замовлення" FontSize="Small" HorizontalOptions="Center" />
-      <Button Text="+38 (073) 130-40-30" FontSize="Medium" BackgroundColor="#FF6666" TextColor="#fff"
-              Command="{Binding PhoneCallCommand}" CommandParameter="+38 (073) 130-40-30"/>
-      <Button Text="+38 (097) 130-40-30" FontSize="Medium" BackgroundColor="#FF6666" TextColor="#fff"
-              Command="{Binding PhoneCallCommand}" CommandParameter="+38 (097) 130-40-30"/>
-    </StackLayout>
-    
-  </StackLayout>
+				<Label Text="Алкогольні напої доставляються лише особам, що досягнули 21 року" FontSize="Small"/>
+				<Label Text="Увага! Деякі фотографії не відповідають вигляду подачі страви!" FontSize="Small"/>
+			</StackLayout>
 
- 
+			<StackLayout VerticalOptions="EndAndExpand">
+				<Label Text="Номери телефонів для замовлення" FontSize="Small" HorizontalOptions="Center" />
+				<Button Text="+38 (073) 130-40-30" FontSize="Medium" BackgroundColor="#FF6666" TextColor="#fff"
+						Command="{Binding PhoneCallCommand}" CommandParameter="+38 (073) 130-40-30"/>
+				<Button Text="+38 (097) 130-40-30" FontSize="Medium" BackgroundColor="#FF6666" TextColor="#fff"
+						Command="{Binding PhoneCallCommand}" CommandParameter="+38 (097) 130-40-30"/>
+				<Button Text="Замовити дзвінок" FontSize="Small" BackgroundColor="#FF6666" TextColor="#fff"
+						Command="{Binding CallOrderCommand}"/>
+			</StackLayout>
+		</StackLayout>
+	</ScrollView>
+
+
+
 </ContentPage>

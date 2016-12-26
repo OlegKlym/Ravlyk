@@ -12,7 +12,7 @@ using Android.Widget;
 
 namespace Ravlyk.Droid
 {
-    [Activity(Theme = "@style/Theme.Splash", NoHistory = false, MainLauncher = true)]
+    [Activity(Theme = "@style/Theme.Splash", NoHistory = true, MainLauncher = true)]
     public class SplashActivity : Activity
     {
         protected override void OnCreate(Bundle savedInstanceState)
@@ -20,6 +20,7 @@ namespace Ravlyk.Droid
             base.OnCreate(savedInstanceState);
 
             StartActivity(typeof(MainActivity));
+            Finish();
         }
     }
 }

@@ -13,30 +13,55 @@ namespace Ravlyk.Services
         public static int categoryId = 1;
         private List<ShopModel> _shops = new List<ShopModel>();
 
-        public async Task<ShopModel> LoadShopAsync(string url, int shopId)
+        public async Task<List<ShopModel>> GetShopsAsync()
         {
-            var existingShop = _shops.FirstOrDefault(x => x.Id == shopId);
-            if (existingShop != null)
+            var root = await LoadHtml("http://www.ravlyk.club/");
+            var shopList = root.Descendants().Where(n => n.GetAttributeValue("class", "").Equals("categories-main")).Single();
+            int shopIndex = 1, divIndex = 1;
+            _shops.Clear();
+
+            while (shopList.ChildNodes[1].ChildNodes[divIndex].ChildNodes[1].GetAttributeValue("href", "") != "mailto:ravlyk.club@gmail.com")
             {
-                return existingShop;
+                var url = "http://ravlyk.club/" + shopList.ChildNodes[1].ChildNodes[divIndex].ChildNodes[1].GetAttributeValue("href", "");
+                var shop = new ShopModel();
+                if ((shop = await LoadShopAsync(url, shopIndex)) != null)
+                {
+                    _shops.Add(shop);
+                    shopIndex++;
+                   
+                }
+                divIndex += 2;
             }
+            return _shops;
+        }
 
-            var root = await LoadHtml(url);
-            var shopList = root.Descendants().Where(n => n.GetAttributeValue("class", "").Equals("col-sm-3 col-sm-offset-0 col-xs-10 col-xs-offset-1 main-category")).Single();
-            var shop = new ShopModel()
+        public async Task<ShopModel> LoadShopAsync(string url, int shopId)
+        {          
+            try 
             {
-                Id = shopId,
-                ImagePath = shopList.ChildNodes[1].GetAttributeValue("src", ""),
-                Title = (shopList.ChildNodes.Count == 7) ? shopList.ChildNodes[3].InnerText : shopList.ChildNodes[3].InnerText,
-                Address = (shopList.ChildNodes.Count == 7)  ? "" : shopList.ChildNodes[5].InnerText,
-                WorkTime = (shopList.ChildNodes.Count == 7) ? shopList.ChildNodes[5].InnerText : shopList.ChildNodes[6].InnerText,
-                Type = (shopList.ChildNodes.Count == 7) ? "" : shopList.ChildNodes[7].InnerText,
-                Description = (shopList.ChildNodes.Count == 7) ? "" : shopList.ChildNodes[8].InnerText,
-                Categories = await GetCategoriesAsync(root)
+                var root = await LoadHtml(url);
+                var shopList = root.Descendants().Where(n => n.GetAttributeValue("class", "").Equals("col-sm-3 col-sm-offset-0 col-xs-10 col-xs-offset-1 main-category")).Single();
+                var shop = new ShopModel()
+                {
+                    Id = shopId,
+                    ImagePath = shopList.ChildNodes[1].GetAttributeValue("src", ""),
+                    Title = (shopList.ChildNodes.Count == 7) ? shopList.ChildNodes[3].InnerText : shopList.ChildNodes[3].InnerText,
+                    Address = (shopList.ChildNodes.Count == 7) ? "" : shopList.ChildNodes[5].InnerText,
+                    WorkTime = (shopList.ChildNodes.Count == 7) ? shopList.ChildNodes[5].InnerText : shopList.ChildNodes[6].InnerText,
+                    Type = (shopList.ChildNodes.Count == 7) ? "" : shopList.ChildNodes[7].InnerText,
+                    Description = (shopList.ChildNodes.Count == 7) ? "" : shopList.ChildNodes[8].InnerText,
+                    Categories = await GetCategoriesAsync(root)
 
-            };
-            _shops.Add(shop);        
-            return shop;
+                };
+               
+                _shops.Add(shop);
+                return shop;
+            }
+            catch
+            {
+                return null;
+            }
+           
         }
 
         public ShopModel LoadShopModelById(int shopId)

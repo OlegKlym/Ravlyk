@@ -1,4 +1,5 @@
-﻿using Caliburn.Micro;
+﻿using Acr.UserDialogs;
+using Caliburn.Micro;
 using Caliburn.Micro.Xamarin.Forms;
 using Ravlyk.Models;
 using Ravlyk.Services;
@@ -78,18 +79,29 @@ namespace Ravlyk.ViewModels
             ClickBasketCommand = new Command(ClickBasket);
         }
 
-        protected void GetFavor()
+        protected async void ClickBasket()
+        {
+            if (IoC.Get<OrderService>().GetOrders().Count != 0)
+            {
+                IoC.Get<INavigationService>().For<OrderViewModel>().WithParam(x => x.TotalPrice, IoC.Get<OrderService>().GetTotalPrice()).Navigate();
+            }
+            else
+            {
+                await UserDialogs.Instance.AlertAsync("Корзина порожня!");
+            }
+
+        }
+
+        protected async void GetFavor()
         {
             if (_database.GetFavor().Count != 0)
             {
-                _navigationService.For<FavouriteViewModel>().Navigate();
+                IoC.Get<INavigationService>().For<FavouriteViewModel>().Navigate();
             }
-        }
-
-        protected void ClickBasket()
-        {
-            if (IoC.Get<OrderService>().GetOrders().Count != 0)
-                IoC.Get<INavigationService>().For<OrderViewModel>().WithParam(x => x.TotalPrice, IoC.Get<OrderService>().GetTotalPrice()).Navigate();
+            else
+            {
+                await UserDialogs.Instance.AlertAsync("Список улюблених страв порожній!");
+            }
         }
 
         protected override void OnActivate()

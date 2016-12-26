@@ -54,7 +54,10 @@ namespace Ravlyk.Droid
 
         protected override object GetInstance(Type service, string key)
         {
+            
             return container.GetInstance(service, key);
         }
+
+       
     }
 }
