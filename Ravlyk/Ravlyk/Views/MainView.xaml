@@ -13,13 +13,13 @@
   <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
     <ListView ItemsSource="{Binding Shops}" HorizontalOptions="CenterAndExpand"
              SelectedItem="{Binding SelectedShop}" HasUnevenRows="True" IsRefreshing="{Binding IsRefreshing}"
-              IsPullToRefreshEnabled="True" RefreshCommand="{Binding RefreshCommand}" SeparatorVisibility="None">
+              IsPullToRefreshEnabled="True" RefreshCommand="{Binding RefreshCommand}">
       <ListView.ItemTemplate>
         <DataTemplate>
           <ViewCell>
             <ViewCell.View>
               <StackLayout Orientation="Horizontal" BackgroundColor="White" Padding="0,5">
-                <Image Source="{Binding ImagePath}" WidthRequest="200" HeightRequest="200" />
+                <Image Source="{Binding ImagePath}" WidthRequest="200" HeightRequest="200" Margin="5"/>
                 <StackLayout Padding="8,1">
                   <Label Text="{Binding Title}" TextColor="#444" FontSize="Large" FontFamily="Open Sans"/>
                   <Label Text="{Binding Address}" TextColor="#666" FontSize="Small" FontFamily="Open Sans"/>

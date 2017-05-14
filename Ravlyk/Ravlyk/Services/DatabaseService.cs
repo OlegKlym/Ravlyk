@@ -44,8 +44,8 @@ namespace Ravlyk.Services
                 Type = shop.Type,
                 Description = shop.Description
             });
-            LoadCategories(shop);
-            LoadDishes(shop);
+            //LoadCategories(shop);
+            //LoadDishes(shop);
 
         }
 

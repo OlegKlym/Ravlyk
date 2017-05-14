@@ -4,7 +4,7 @@ using Ravlyk.Helpers;
 using Ravlyk.Services;
 using Ravlyk.ViewModels;
 using Ravlyk.Views;
-
+using System;
 using Xamarin.Forms;
 
 namespace Ravlyk
@@ -38,7 +38,7 @@ namespace Ravlyk
 
 
             AppStart = true;
-            Initialize();
+            Initialize();           
             DisplayRootView<MainView>();
         }
 
@@ -47,8 +47,8 @@ namespace Ravlyk
             container.Instance<INavigationService>(new NavigationPageAdapter(navigationPage));
         }
 
-
        
+
 
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using Ravlyk.Services;
+using Ravlyk.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -37,6 +38,15 @@ namespace Ravlyk.iOS
             return container.GetInstance(service, key);
         }
 
-       
+        protected override IEnumerable<Assembly> SelectAssemblies()
+        {
+            return new[]
+            {
+                GetType().Assembly,
+                typeof(MainViewModel).Assembly
+            };
+        }
+
+
     }
 }

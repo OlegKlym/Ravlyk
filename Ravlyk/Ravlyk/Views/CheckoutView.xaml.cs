@@ -13,6 +13,7 @@ namespace Ravlyk.Views
 		public CheckoutView()
 		{
 			InitializeComponent ();
-		}
+            NavigationPage.SetBackButtonTitle(this, "");
+        }
 	}
 }

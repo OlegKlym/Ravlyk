@@ -13,7 +13,7 @@ namespace Ravlyk.Views
         public FavouriteView()
         {
             InitializeComponent();
-            
+            NavigationPage.SetBackButtonTitle(this, "");
         }
     }
 }

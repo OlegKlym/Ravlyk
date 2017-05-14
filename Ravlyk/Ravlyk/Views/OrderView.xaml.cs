@@ -13,6 +13,7 @@ namespace Ravlyk.Views
 		public OrderView ()
 		{
 			InitializeComponent ();
-		}
+            NavigationPage.SetBackButtonTitle(this, "");
+        }
 	}
 }

@@ -8,7 +8,7 @@
   </ContentPage.ToolbarItems>
 
   <StackLayout>
-    <ListView ItemsSource="{Binding Shop.Categories}"
+    <ListView ItemsSource="{Binding Shop.Categories}" SeparatorVisibility="None"
              SelectedItem="{Binding SelectedCategory}" HasUnevenRows="True"
              HorizontalOptions="CenterAndExpand">
       <ListView.ItemTemplate>

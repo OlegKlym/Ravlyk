@@ -18,7 +18,9 @@ namespace Ravlyk.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             Forms.Init();
+           
             LoadApplication(new App(IoC.Get<SimpleContainer>()));
+
             return base.FinishedLaunching(app, options);
         }
     }

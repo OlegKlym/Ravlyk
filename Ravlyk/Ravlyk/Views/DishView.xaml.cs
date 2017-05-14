@@ -13,6 +13,7 @@ namespace Ravlyk.Views
 		public DishView ()
 		{
 			InitializeComponent ();
-		}
+            NavigationPage.SetBackButtonTitle(this, "");
+        }
 	}
 }

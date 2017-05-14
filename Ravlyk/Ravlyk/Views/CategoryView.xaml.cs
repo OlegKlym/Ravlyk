@@ -13,6 +13,7 @@ namespace Ravlyk.Views
 		public CategoryView ()
 		{
 			InitializeComponent ();
-		}
+            NavigationPage.SetBackButtonTitle(this, "");
+        }
 	}
 }
