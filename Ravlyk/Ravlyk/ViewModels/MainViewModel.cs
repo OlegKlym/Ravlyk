@@ -217,9 +217,7 @@ namespace Ravlyk.ViewModels
             Shops = _database.GetShopsFromBD();
             IsLoading = false;
             IsRefreshing = false;
-        }
-
-      
+        }    
     }
 }
 

@@ -44,9 +44,8 @@ namespace Ravlyk.Services
                 Type = shop.Type,
                 Description = shop.Description
             });
-            //LoadCategories(shop);
+            LoadCategories(shop);
             //LoadDishes(shop);
-
         }
 
         public void LoadCategories(ShopModel shop)
@@ -56,7 +55,6 @@ namespace Ravlyk.Services
             {
                 InsertCategory(shop.Id, j);
             }
-
         }
 
         public void InsertCategory(int shopId, int id)
@@ -126,6 +124,19 @@ namespace Ravlyk.Services
                 foreach (var item in db)
                     if (item.Id_Category == categoryId)
                         return item.Title;
+            }
+            return null;
+        }
+
+        public ShopEntity GetShop(int shopId)
+        {
+            var db = IoC.Get<DatabaseService>().GetShops();
+            foreach (var item in db)
+            {
+                if (item.Id == shopId)
+                {
+                    return item;
+                }                            
             }
             return null;
         }

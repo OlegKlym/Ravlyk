@@ -3,6 +3,7 @@ using Caliburn.Micro;
 using Caliburn.Micro.Xamarin.Forms;
 using Ravlyk.Models;
 using Ravlyk.Services;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -16,18 +17,49 @@ namespace Ravlyk.ViewModels
         public ICommand GetFavorCommand { set; get; }
         public DatabaseService _database;
 
-        private ShopModel _shop;
-        public ShopModel Shop
+
+        private string _shopImage;
+        public string ShopImage
         {
             get
             {
-                return _shop;
+                return _shopImage;
             }
 
             set
             {
-                _shop = value;
-                NotifyOfPropertyChange(() => Shop);
+                _shopImage = value;
+                NotifyOfPropertyChange(() => ShopImage);
+            }
+        }
+
+        private string _title;
+        public string Title
+        {
+            get
+            {
+                return _title;
+            }
+
+            set
+            {
+                _title = value;
+                NotifyOfPropertyChange(() => Title);
+            }
+        }
+
+        private List<CategoryModel> _categories;
+        public List<CategoryModel> Categories
+        {
+            get
+            {
+                return _categories;
+            }
+
+            set
+            {
+                _categories = value;
+                NotifyOfPropertyChange(() => Categories);
             }
         }
 
@@ -104,11 +136,9 @@ namespace Ravlyk.ViewModels
         protected override void OnActivate()
         {
             base.OnActivate();
-            Shop = new ShopModel()
-            {
-                Title = _database.GetTitle(ShopId, 0),
-                Categories = _database.GetCategoriesFromBD(ShopId)
-            };                         
+            Categories = _database.GetCategoriesFromBD(ShopId);
+            Title = _database.GetShop(ShopId).Title;
+            ShopImage = _database.GetShop(ShopId).ImagePath;
         }        
     }
 }

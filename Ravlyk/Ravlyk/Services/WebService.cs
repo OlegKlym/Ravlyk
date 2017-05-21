@@ -46,12 +46,12 @@ namespace Ravlyk.Services
                 {
                     Id = shopId,
                     ImagePath = shopList.ChildNodes[1].ChildNodes[1].GetAttributeValue("src", ""),
-                    Title = (shopList.ChildNodes.Count == 7) ? shopList.ChildNodes[3].InnerText : shopList.ChildNodes[3].InnerText,
-                    Type = (shopList.ChildNodes.Count == 7) ? "" : shopList.ChildNodes[5].InnerText,
-                    Description = (shopList.ChildNodes.Count == 7) ? "" : shopList.ChildNodes[7].InnerText,
-                    Address = (shopList.ChildNodes.Count == 7) ? "" : shopList.ChildNodes[9].InnerText,
-                    WorkTime = (shopList.ChildNodes.Count == 7) ? shopList.ChildNodes[5].InnerText : shopList.ChildNodes[11].InnerText,
-                    //Categories = await GetCategoriesAsync(root)
+                    Title =  shopList.ChildNodes[3].InnerText,
+                    Type = shopList.ChildNodes[5].InnerText,
+                    Description =  shopList.ChildNodes[7].InnerText.Replace("\n                ","").Replace("&nbsp",""),
+                    Address =  shopList.ChildNodes[9].InnerText,
+                    WorkTime = shopList.ChildNodes[11].InnerText,
+                    Categories = await GetCategoriesAsync(root)
                 };
                
                 _shops.Add(shop);
@@ -72,28 +72,18 @@ namespace Ravlyk.Services
         private async static Task<List<CategoryModel>> GetCategoriesAsync(HtmlNode root)
         {
             List<CategoryModel> _categories = new List<CategoryModel>() { };
-            var divList = root.Descendants().Where(n => n.GetAttributeValue("id", "").Equals("column-left")).Single().ChildNodes[1].ChildNodes;
-            bool flag = false;
-            foreach (var item in divList)
+            var divList = root.Descendants().Where(n => n.GetAttributeValue("class", "").Equals("left-category-menu")).Single();
+            for(var i = 3; i < divList.ChildNodes.Count; i+=2)
             {
-                if (item.NodeType == HtmlNodeType.Element)
-                {
-                    if (!flag)
-                        flag = true;
-                    else
-                    {
-                        string url = item.ChildNodes[3].GetAttributeValue("href", "");
+                string url = divList.ChildNodes[i].GetAttributeValue("href", "");
 
-                        _categories.Add(new CategoryModel()
-                        {
-                            Id = categoryId,
-                            ImagePath = item.ChildNodes[1].GetAttributeValue("src", ""),
-                            Title = item.ChildNodes[3].InnerText,
-                            Dishes = await GetDishesAsync(url)
-                        });
-                        categoryId++;
-                    }
-                }
+                _categories.Add(new CategoryModel()
+                {
+                    Id = categoryId,
+                    Title = divList.ChildNodes[i].FirstChild.InnerText,
+                    //Dishes = await GetDishesAsync(url)
+                });
+                categoryId++;
             }
             return _categories;
         }
